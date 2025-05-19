@@ -11,7 +11,7 @@ function OnePage() {
                 flexDirection: 'column', 
                 justifyContent: "space-between", 
                 padding: 2, 
-                minHeight: "90vh"
+                minHeight: "85vh"
             }}
         >
         <Box sx={{minHeight: "100%"}}>
@@ -30,7 +30,7 @@ function OnePage() {
                     color: 'white', 
                     width: "100%", 
                     borderRadius: 27, 
-                    height: "100%"
+                    height: "100%",
                 }}
                 onClick={introductionStore.nextPage}
                 >

@@ -17,7 +17,7 @@ function TwoPage() {
                     flexDirection: 'column', 
                     justifyContent: "space-between", 
                     padding: 2, 
-                    minHeight: "90vh"
+                    minHeight: "85vh"
                 }}
             >
             <Box sx={{minHeight: "100%"}}>
