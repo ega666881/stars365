@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Request, Query
 from aiogram import Bot, Dispatcher, Router, types, F
 from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.types import Message
+from aiogram.types import Message, FSInputFile
 import asyncio
 import json
 import requests
@@ -11,7 +11,7 @@ from aiogram.types import PreCheckoutQuery, SuccessfulPayment
 import traceback
 import time
 import random
-
+import os
 
 TELEGRAM_TOKEN = '7723808676:AAHwaL5RENzPUH4p53OAVVflG7ux9Cenht4'
 CHAT_ID = -4674720334
@@ -28,23 +28,6 @@ async def set_webhook():
     await bot.set_webhook(url="https://serenely-scholarly-bulbul.cloudpub.ru/webhook",
                            allowed_updates=dp.resolve_used_update_types(),
                           drop_pending_updates=True)
-
-async def lotteryPerDay():
-    while True:
-        response = requests.get(f"{BACKEND_IP}/users/get-users?subscripted=true")
-        users = response.json()
-        winUser = random.choice(users)
-        print(json.dumps({"id": winUser['id']}))
-        response = requests.post(f"{BACKEND_IP}/users/win-user-stars", json.dumps({"id": winUser['id']}), headers={'content-type': 'application/json'})
-        data = response.json()
-        match(response.status_code):
-            case 201:
-                await bot.send_message(CHAT_ID, f"{winUser['username']} выйграл {data['winStars']} stars")
-            
-            case _:
-                pass
-        
-        time.sleep(24*60*60)
 
 class MessageRequest(BaseModel):
     telegram_id: str
@@ -81,7 +64,13 @@ async def getInvoice(
     username: str,
     amount: int = 1,
 ):
-    await bot.send_message(CHAT_ID, f"Розыгрыш\nВыйграл: @{username}\nНаграда: {amount}")
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    image_path = os.path.join(current_dir, 'images', '00020-1855996300.jpg')
+
+    photo = FSInputFile(path = image_path, filename = 'a.jpg')
+    await bot.send_photo(chat_id=CHAT_ID,
+                        photo=photo,
+                        caption=f"Поздравляем победителя\n  РОЗЫГРЫША ДНЯ 🚀\n@{username}\nТВОЙ ПРИЗ {amount} ⭐️ 🥳")
 
 
 @app.post("/webhook")
