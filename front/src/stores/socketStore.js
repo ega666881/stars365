@@ -2,6 +2,7 @@
 import { makeAutoObservable } from 'mobx';
 import { io, Socket } from 'socket.io-client';
 import clientStore from './clientStore';
+import { backendIp } from '../utils/request';
 
 class SocketStore {
   socket = null;
@@ -14,7 +15,7 @@ class SocketStore {
   }
 
   connect() {
-    const socket = io('https://stirringly-glorious-leopard.cloudpub.ru/');
+    const socket = io(backendIp);
     this.socket = socket;
     this.isConnected = true;
 
