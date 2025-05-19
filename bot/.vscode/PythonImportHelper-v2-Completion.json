@@ -1,0 +1,355 @@
+[
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Request",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Query",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Bot",
+        "importPath": "aiogram",
+        "description": "aiogram",
+        "isExtraImport": true,
+        "detail": "aiogram",
+        "documentation": {}
+    },
+    {
+        "label": "Dispatcher",
+        "importPath": "aiogram",
+        "description": "aiogram",
+        "isExtraImport": true,
+        "detail": "aiogram",
+        "documentation": {}
+    },
+    {
+        "label": "Router",
+        "importPath": "aiogram",
+        "description": "aiogram",
+        "isExtraImport": true,
+        "detail": "aiogram",
+        "documentation": {}
+    },
+    {
+        "label": "types",
+        "importPath": "aiogram",
+        "description": "aiogram",
+        "isExtraImport": true,
+        "detail": "aiogram",
+        "documentation": {}
+    },
+    {
+        "label": "F",
+        "importPath": "aiogram",
+        "description": "aiogram",
+        "isExtraImport": true,
+        "detail": "aiogram",
+        "documentation": {}
+    },
+    {
+        "label": "Bot",
+        "importPath": "aiogram",
+        "description": "aiogram",
+        "isExtraImport": true,
+        "detail": "aiogram",
+        "documentation": {}
+    },
+    {
+        "label": "Router",
+        "importPath": "aiogram",
+        "description": "aiogram",
+        "isExtraImport": true,
+        "detail": "aiogram",
+        "documentation": {}
+    },
+    {
+        "label": "F",
+        "importPath": "aiogram",
+        "description": "aiogram",
+        "isExtraImport": true,
+        "detail": "aiogram",
+        "documentation": {}
+    },
+    {
+        "label": "MemoryStorage",
+        "importPath": "aiogram.fsm.storage.memory",
+        "description": "aiogram.fsm.storage.memory",
+        "isExtraImport": true,
+        "detail": "aiogram.fsm.storage.memory",
+        "documentation": {}
+    },
+    {
+        "label": "Message",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "PreCheckoutQuery",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "SuccessfulPayment",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "CallbackQuery",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "Message",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "ReplyKeyboardMarkup",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "KeyboardButton",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "KeyboardButtonPollType",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "asyncio",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "asyncio",
+        "description": "asyncio",
+        "detail": "asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
+        "documentation": {}
+    },
+    {
+        "label": "start",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "start",
+        "description": "start",
+        "detail": "start",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "traceback",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "traceback",
+        "description": "traceback",
+        "detail": "traceback",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "random",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "random",
+        "description": "random",
+        "detail": "random",
+        "documentation": {}
+    },
+    {
+        "label": "Command",
+        "importPath": "aiogram.filters",
+        "description": "aiogram.filters",
+        "isExtraImport": true,
+        "detail": "aiogram.filters",
+        "documentation": {}
+    },
+    {
+        "label": "CommandStart",
+        "importPath": "aiogram.filters",
+        "description": "aiogram.filters",
+        "isExtraImport": true,
+        "detail": "aiogram.filters",
+        "documentation": {}
+    },
+    {
+        "label": "ReplyKeyboardBuilder",
+        "importPath": "aiogram.utils.keyboard",
+        "description": "aiogram.utils.keyboard",
+        "isExtraImport": true,
+        "detail": "aiogram.utils.keyboard",
+        "documentation": {}
+    },
+    {
+        "label": "MessageRequest",
+        "kind": 6,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "class MessageRequest(BaseModel):\n    telegram_id: str\n@my_router.pre_checkout_query(lambda query: True)\nasync def pre_checkout_query(pre_checkout_q: types.PreCheckoutQuery):\n    await bot.answer_pre_checkout_query(pre_checkout_q.id, ok=True)\n@app.on_event(\"startup\")\nasync def startup():\n    dp.include_routers(start.router, my_router)\n    # asyncio.create_task(dp.start_polling(bot))\n    await set_webhook()",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "TELEGRAM_TOKEN",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "TELEGRAM_TOKEN = '7723808676:AAHwaL5RENzPUH4p53OAVVflG7ux9Cenht4'\nCHAT_ID = -4674720334\nBACKEND_IP = 'http://127.0.0.1:8000/api'\nbot = Bot(token=TELEGRAM_TOKEN)\nstorage = MemoryStorage()\ndp = Dispatcher()\nmy_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "CHAT_ID",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "CHAT_ID = -4674720334\nBACKEND_IP = 'http://127.0.0.1:8000/api'\nbot = Bot(token=TELEGRAM_TOKEN)\nstorage = MemoryStorage()\ndp = Dispatcher()\nmy_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "BACKEND_IP",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "BACKEND_IP = 'http://127.0.0.1:8000/api'\nbot = Bot(token=TELEGRAM_TOKEN)\nstorage = MemoryStorage()\ndp = Dispatcher()\nmy_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "bot",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "bot = Bot(token=TELEGRAM_TOKEN)\nstorage = MemoryStorage()\ndp = Dispatcher()\nmy_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "storage",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "storage = MemoryStorage()\ndp = Dispatcher()\nmy_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nasync def lotteryPerDay():",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "dp",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "dp = Dispatcher()\nmy_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nasync def lotteryPerDay():\n    while True:",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "my_router",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "my_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nasync def lotteryPerDay():\n    while True:\n        response = requests.get(f\"{BACKEND_IP}/users/get-users?subscripted=true\")",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "app = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nasync def lotteryPerDay():\n    while True:\n        response = requests.get(f\"{BACKEND_IP}/users/get-users?subscripted=true\")\n        users = response.json()",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "start",
+        "description": "start",
+        "peekOfCode": "router = Router(name=__name__)\n@router.message(CommandStart())\nasync def start(message: Message, bot: Bot):\n    body = {\n        \"telegram_id\": message.from_user.id, \n        \"username\": message.from_user.username,\n        \"first_name\": message.from_user.first_name,\n        \"last_name\": message.from_user.last_name,\n        \"photo_url\": \"\"\n        }",
+        "detail": "start",
+        "documentation": {}
+    }
+]

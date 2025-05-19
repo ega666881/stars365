@@ -1,0 +1,34 @@
+#wheel {
+    position: relative; /* Обязательно для правильного позиционирования */
+    width: 600px;
+    height: 600px;
+    display: flex; /* Для центрирования содержимого */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Скрываем выходящие за границы элементы */
+  }
+  
+  /* Анимация покачивания */
+  @keyframes sway {
+    0%, 100% {
+      transform: rotate(-2deg); /* Наклон влево */
+    }
+    50% {
+      transform: rotate(2deg); /* Наклон вправо */
+    }
+  }
+  
+  /* Анимация изменения размеров */
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1); /* Исходный размер */
+    }
+    50% {
+      transform: scale(1.05); /* Увеличение размера */
+    }
+  }
+  
+  /* Класс для активации анимаций */
+  .wheel-animated {
+    animation: sway 3s infinite ease-in-out, pulse 3s infinite ease-in-out;
+  }
