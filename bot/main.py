@@ -50,7 +50,7 @@ async def getInvoice(
 ):
     invoice = await bot.create_invoice_link(
         title="Подписка на 365 дней",
-        description="test",
+        description="Подписка на 365 дней",
         payload=f"{telegram_id}",
         provider_token="",
         currency="XTR",
