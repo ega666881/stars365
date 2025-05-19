@@ -2025,6 +2025,14 @@
         "documentation": {}
     },
     {
+        "label": "FSInputFile",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
         "label": "PreCheckoutQuery",
         "importPath": "aiogram.types",
         "description": "aiogram.types",
@@ -14231,7 +14239,7 @@
         "kind": 5,
         "importPath": "bot.main",
         "description": "bot.main",
-        "peekOfCode": "storage = MemoryStorage()\ndp = Dispatcher()\nmy_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nasync def lotteryPerDay():",
+        "peekOfCode": "storage = MemoryStorage()\ndp = Dispatcher()\nmy_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nclass MessageRequest(BaseModel):",
         "detail": "bot.main",
         "documentation": {}
     },
@@ -14240,7 +14248,7 @@
         "kind": 5,
         "importPath": "bot.main",
         "description": "bot.main",
-        "peekOfCode": "dp = Dispatcher()\nmy_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nasync def lotteryPerDay():\n    while True:",
+        "peekOfCode": "dp = Dispatcher()\nmy_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nclass MessageRequest(BaseModel):\n    telegram_id: str",
         "detail": "bot.main",
         "documentation": {}
     },
@@ -14249,7 +14257,7 @@
         "kind": 5,
         "importPath": "bot.main",
         "description": "bot.main",
-        "peekOfCode": "my_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nasync def lotteryPerDay():\n    while True:\n        response = requests.get(f\"{BACKEND_IP}/users/get-users?subscripted=true\")",
+        "peekOfCode": "my_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nclass MessageRequest(BaseModel):\n    telegram_id: str\n@my_router.pre_checkout_query(lambda query: True)",
         "detail": "bot.main",
         "documentation": {}
     },
@@ -14258,7 +14266,7 @@
         "kind": 5,
         "importPath": "bot.main",
         "description": "bot.main",
-        "peekOfCode": "app = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nasync def lotteryPerDay():\n    while True:\n        response = requests.get(f\"{BACKEND_IP}/users/get-users?subscripted=true\")\n        users = response.json()",
+        "peekOfCode": "app = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nclass MessageRequest(BaseModel):\n    telegram_id: str\n@my_router.pre_checkout_query(lambda query: True)\nasync def pre_checkout_query(pre_checkout_q: types.PreCheckoutQuery):",
         "detail": "bot.main",
         "documentation": {}
     },
