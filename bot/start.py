@@ -6,6 +6,7 @@ import requests
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, KeyboardButtonPollType
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 import json
+import keyboards
 
 router = Router(name=__name__)
 
@@ -48,7 +49,7 @@ async def start(message: Message, bot: Bot):
 в наше сообщество
 
 • ЗАРАБАТЫВАЙ с КАЖДОЙ ПОБЕДЫ
-в твоей команде!""", parse_mode="HTML")
+в твоей команде!""", parse_mode="HTML", reply_markup=keyboards.startKeyboard())
 
 
     
