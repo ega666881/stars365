@@ -37,7 +37,7 @@ export class UsersService {
         const response = await axios.get(`${process.env.BOT_URL}/get-invoice`, {
             params: {
                 telegram_id: user.telegram_id,
-                amount: 1,
+                amount: 365,
             }
         })
         
