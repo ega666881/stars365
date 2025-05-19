@@ -1913,6 +1913,102 @@
         "documentation": {}
     },
     {
+        "label": "InlineKeyboardMarkup",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "InlineKeyboardButton",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "Message",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "FSInputFile",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "PreCheckoutQuery",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "SuccessfulPayment",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "CallbackQuery",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "Message",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "FSInputFile",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "ReplyKeyboardMarkup",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "KeyboardButton",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "KeyboardButtonPollType",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
         "label": "FastAPI",
         "importPath": "fastapi",
         "description": "fastapi",
@@ -2014,78 +2110,6 @@
         "description": "aiogram.fsm.storage.memory",
         "isExtraImport": true,
         "detail": "aiogram.fsm.storage.memory",
-        "documentation": {}
-    },
-    {
-        "label": "Message",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
-        "documentation": {}
-    },
-    {
-        "label": "FSInputFile",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
-        "documentation": {}
-    },
-    {
-        "label": "PreCheckoutQuery",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
-        "documentation": {}
-    },
-    {
-        "label": "SuccessfulPayment",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
-        "documentation": {}
-    },
-    {
-        "label": "CallbackQuery",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
-        "documentation": {}
-    },
-    {
-        "label": "Message",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
-        "documentation": {}
-    },
-    {
-        "label": "ReplyKeyboardMarkup",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
-        "documentation": {}
-    },
-    {
-        "label": "KeyboardButton",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
-        "documentation": {}
-    },
-    {
-        "label": "KeyboardButtonPollType",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
         "documentation": {}
     },
     {
@@ -14187,6 +14211,15 @@
         "description": "back.node_modules.npm.node_modules.node-gyp.gyp.test_gyp",
         "peekOfCode": "def print_configuration_info():\n    print(\"Test configuration:\")\n    if sys.platform == \"darwin\":\n        sys.path.append(os.path.abspath(\"test/lib\"))\n        import TestMac\n        print(f\"  Mac {platform.mac_ver()[0]} {platform.mac_ver()[2]}\")\n        print(f\"  Xcode {TestMac.Xcode.Version()}\")\n    elif sys.platform == \"win32\":\n        sys.path.append(os.path.abspath(\"pylib\"))\n        import gyp.MSVSVersion",
         "detail": "back.node_modules.npm.node_modules.node-gyp.gyp.test_gyp",
+        "documentation": {}
+    },
+    {
+        "label": "checkSubscription",
+        "kind": 2,
+        "importPath": "bot.keyboards",
+        "description": "bot.keyboards",
+        "peekOfCode": "def checkSubscription():\n    buttons = [\n        [\n            InlineKeyboardButton(\n                    text = 'ТЫК СЮДА👆🏻',\n                    web_app=\"https://t.me/starsgame365bot/app\"\n            ),\n            InlineKeyboardButton(\n                    text = 'Комьюнити',\n                    url=\"https://t.me/starsgame365\"",
+        "detail": "bot.keyboards",
         "documentation": {}
     },
     {
