@@ -2172,6 +2172,15 @@
         "documentation": {}
     },
     {
+        "label": "keyboards",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "keyboards",
+        "description": "keyboards",
+        "detail": "keyboards",
+        "documentation": {}
+    },
+    {
         "label": "_Known",
         "kind": 6,
         "importPath": "back.node_modules.flatted.python.flatted",
@@ -14214,11 +14223,11 @@
         "documentation": {}
     },
     {
-        "label": "checkSubscription",
+        "label": "startKeyboard",
         "kind": 2,
         "importPath": "bot.keyboards",
         "description": "bot.keyboards",
-        "peekOfCode": "def checkSubscription():\n    buttons = [\n        [\n            InlineKeyboardButton(\n                    text = 'ТЫК СЮДА👆🏻',\n                    web_app=\"https://t.me/starsgame365bot/app\"\n            ),\n            InlineKeyboardButton(\n                    text = 'Комьюнити',\n                    url=\"https://t.me/starsgame365\"",
+        "peekOfCode": "def startKeyboard():\n    buttons = [\n        [\n            # InlineKeyboardButton(\n            #         text = 'ТЫК СЮДА👆🏻',\n            #         web_app=\"https://t.me/starsgame365bot/app\"\n            # ),\n            InlineKeyboardButton(\n                    text = 'Комьюнити',\n                    url=\"https://t.me/starsgame365\"",
         "detail": "bot.keyboards",
         "documentation": {}
     },

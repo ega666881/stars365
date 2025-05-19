@@ -47,7 +47,7 @@ export class DailyTaskService implements OnModuleInit, OnModuleDestroy {
         .where({id: winUser.id})
     
     const currentDate = new Date()
-    currentDate.setTime(currentDate.getTime() + (12 * 60 * 60 * 1000))
+    currentDate.setTime(currentDate.getTime() + (24 * 60 * 60 * 1000))
     await this.knex<ISettings>(tableNames.settings)
         .update({
             lotteryDate: currentDate
