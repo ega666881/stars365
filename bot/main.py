@@ -49,7 +49,7 @@ async def getInvoice(
     amount: int = 1,
 ):
     invoice = await bot.create_invoice_link(
-        title="test",
+        title="Подписка на 365 дней",
         description="test",
         payload=f"{telegram_id}",
         provider_token="",
