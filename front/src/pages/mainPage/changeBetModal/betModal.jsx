@@ -48,7 +48,7 @@ const BetModal = () => {
             >
                 <img  src={mediaManager('closeIcon')} />
             </IconButton>
-            <Box
+            {/* <Box
                 sx={{
                     borderRadius: 21,
                     backgroundColor: "#000000",
@@ -62,7 +62,7 @@ const BetModal = () => {
                         fontSize: '20px'
                     }}    
                 >ДРУГАЯ СТАВКА</Typography>
-            </Box>
+            </Box> */}
           
         </Box>
       </DialogTitle>

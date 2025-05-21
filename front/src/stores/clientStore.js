@@ -34,6 +34,7 @@ class ClientStore {
 
         } else if (method === 2) {
             console.log('-')
+            console.log(Number(this.user.balance) + Number(amount))
             this.user.balance = Number(this.user.balance) - Number(amount)
         }
     })

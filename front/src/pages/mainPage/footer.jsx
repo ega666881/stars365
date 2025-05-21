@@ -46,7 +46,7 @@ function Footer() {
             <Box
                 
             >
-                <ImageSwitch onIcon={mediaManager('autoIcon')} offIcon={mediaManager('autoIcon')} onChange={spinStore.setAutoSpin} checked={spinStore.autoSpin}/>
+                <ImageSwitch onIcon={mediaManager('autoActiveIcon')} offIcon={mediaManager('autoIcon')} onChange={spinStore.setAutoSpin} checked={spinStore.autoSpin}/>
             </Box>
         </Box>
         <Box

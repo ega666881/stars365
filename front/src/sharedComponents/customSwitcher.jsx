@@ -64,7 +64,7 @@ const ImageSwitch = ({ onIcon, offIcon, onChange, checked }) => {
         borderRadius: 27,
         alignItems: "center",
         "& .MuiSwitch-thumb": {
-          backgroundImage: `url(${checked ? onIcon : offIcon})`,
+          backgroundImage: `url(${isChecked ? onIcon : offIcon})`,
           backgroundColor: "#000000",
           width: 60,
           height: 40,

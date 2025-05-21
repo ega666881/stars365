@@ -43,18 +43,15 @@ function SpinTest({ targetSegment = null, segments = [] }) {
     rotationRef.current = rotation;
   }, [rotation]);
 
-  // Автоматическое вращение при spinStore.autoSpin
-  useEffect(() => {
-    let intervalId;
-    if (spinStore.autoSpin && !isSpinning) {
-      intervalId = setTimeout(() => {
-        handleSpin();
-      }, 100); // Минимальная задержка для запуска
-    }
-    return () => {
-      if (intervalId) clearTimeout(intervalId);
-    };
-  }, [spinStore.autoSpin, isSpinning]);
+  // useEffect(() => {
+  //   setInterval(() => {
+      
+  //     if (spinStore.autoSpin && !isSpinning) {
+  //         handleSpin();
+  //     }
+  //   }, [5000])
+    
+  // }, [true]);
 
   const getTargetSegment = () => {
     if (spinStore.targetSegment !== null && spinStore.targetSegment >= 0 && spinStore.targetSegment < segmentCount) {
@@ -64,10 +61,15 @@ function SpinTest({ targetSegment = null, segments = [] }) {
   };
 
   // Запуск вращения
-  const handleSpin = useCallback(() => {
-    if (isSpinning || changeBetModalStore.bet.value > clientStore.user.balance) {
+  const handleSpin = useCallback((manualSpin = false) => {
+    if (!manualSpin) {
+      if (isSpinning) {
+        return;
+      }
+    }
+
+    if (changeBetModalStore.bet.value > clientStore.user.balance) {
       spinStore.setAutoSpin(false);
-      return;
     }
 
     spinStore.makeBet();
@@ -155,28 +157,35 @@ function SpinTest({ targetSegment = null, segments = [] }) {
   const handleAnimationComplete = useCallback(() => {
     if (isSpinning) {
       const finalAngle = rotationRef.current % 360;
-      const segmentIndex = Math.floor((finalAngle + segmentAngle / 2) % 360 / segmentAngle);
-
       setIsSpinning(false);
       spinStore.setIsSpinning(false);
-      spinStore.setAutoSpin(false); // Сбрасываем autoSpin после вращения
-      setCurrentResult(segmentIndex);
-
-      
-      stopVibrationOnStop();
-      playFinalSound();
-      console.log(spinStore.currentGame)
-      if (spinStore.currentGame.win) {
-        clientStore.updateUserBalance(1, spinStore.currentGame.coinCount);
-        
-      } else if (spinStore.currentGame.win === false) {
-        clientStore.updateUserBalance(2, spinStore.currentGame.betValue);
-        clientStore.updateUserCandy(1, spinStore.currentGame.betValue);
+      if (clientStore.user.balance < changeBetModalStore.bet.value) {
+        console.log("hhhh")
+        spinStore.setAutoSpin(false);
       }
 
+      if (spinStore.currentGame.win) {
+        setCurrentResult(`Выйграл ${spinStore.currentGame.countCount}`)
+        clientStore.updateUserBalance(1, spinStore.currentGame.coinCount)
+
+      } else if (spinStore.currentGame.win === false) {
+        setCurrentResult(`Пройгрыш`)
+        console.log(spinStore.currentGame)
+        clientStore.updateUserBalance(2, spinStore.currentGame.betValue)
+        clientStore.updateUserCandy(1, spinStore.currentGame.betValue)
+      }
+      stopVibrationOnStop();
+      playFinalSound();
+
       spinStore.resetCurrentGame();
+      console.log(spinStore.autoSpin)
+      if (spinStore.autoSpin) {
+        setRotation(1500)
+        const spinTimeout = setTimeout(() => {handleSpin(true)}, 1000); // задержка перед следующим спином
+        return () => clearTimeout(spinTimeout);
+      }
     }
-  }, [isSpinning, segmentAngle]);
+  }, [isSpinning, segmentAngle, handleSpin]);
 
   // Анимация стрелки и звук при прохождении сегментов
   useEffect(() => {
@@ -328,7 +337,7 @@ function SpinTest({ targetSegment = null, segments = [] }) {
           transform: "translateZ(0) scale3d(1, 1, 1)", // ✅ Ускорение GPU
           cursor: isSpinning ? "default" : "grab"
         }}
-        onClick={() => changeBetModalStore.setOpenModal(true)}
+        
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -379,6 +388,7 @@ function SpinTest({ targetSegment = null, segments = [] }) {
           transform: "translate(-0%, -0%)",
           zIndex: 2
         }}
+        onClick={() => changeBetModalStore.setOpenModal(true)}
       >
         <img
           src={mediaManager("elipceCenterSpinImage")}
@@ -396,13 +406,30 @@ function SpinTest({ targetSegment = null, segments = [] }) {
       >
         <Typography
           sx={{
-            fontSize: 20,
-            color: "white",
+            fontSize: 25,
+            
             fontWeight: "bold",
-            marginLeft: 4
+            background: `
+            linear-gradient(
+              to right,
+              #FFFCAE 0%,
+              #FFAE35 47%,
+              #AE4900 67%,
+              #FFB400 100%
+            )
+          `,
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            MozBackgroundClip: "text",
+            MozTextFillColor: "transparent",
+            backgroundClip: "text",
+            color: "transparent",
           }}
+          onClick={() => changeBetModalStore.setOpenModal(true)}
         >
-          {changeBetModalStore.bet.value}
+          {Number(changeBetModalStore.bet.value) > 1000 ? (<>
+            {Array.from(String(changeBetModalStore.bet.value))[0]}K
+          </>):(changeBetModalStore.bet.value)}
         </Typography>
       </Box>
 
@@ -421,7 +448,7 @@ function SpinTest({ targetSegment = null, segments = [] }) {
             zIndex: 2
           }}
         >
-          Выпало: {currentResult + 1}
+          {currentResult}
         </Box>
       )}
     </Box>
