@@ -427,7 +427,7 @@ function SpinTest({ targetSegment = null, segments = [] }) {
           }}
           onClick={() => changeBetModalStore.setOpenModal(true)}
         >
-          {Number(changeBetModalStore.bet.value) > 1000 ? (<>
+          {Number(changeBetModalStore.bet.value) >= 1000 ? (<>
             {Array.from(String(changeBetModalStore.bet.value))[0]}K
           </>):(changeBetModalStore.bet.value)}
         </Typography>
