@@ -48,21 +48,30 @@ const BetModal = () => {
             >
                 <img  src={mediaManager('closeIcon')} />
             </IconButton>
-            {/* <Box
-                sx={{
-                    borderRadius: 21,
-                    backgroundColor: "#000000",
-                    padding: 2,
-                    justifyContent: 'center',
-                    
-                }}
+            <Button
+              key={'candy'}
+              variant={changeBetModalStore.bet.value === 'candy' ? 'outlined' : 'text'}
+              color="primary"
+              fullWidth
+              onClick={() => changeBetModalStore.setBetValue({value: "candy"})}
+              sx={{
+                borderRadius: '20px',
+                borderColor: '#878787',
+                padding: '12px',
+                '&.Mui-disabled': { opacity: 0.5 },
+              }}
             >
-                <Typography 
-                    sx={{
-                        fontSize: '20px'
-                    }}    
-                >ДРУГАЯ СТАВКА</Typography>
-            </Box> */}
+              <Typography
+                sx={{
+                    color: changeBetModalStore.bet.value === 'candy' ? 'white':'#878787',
+                    fontSize: '20px',
+                    display: 'flex',
+                    gap: 0.3,
+                }}
+              >
+                Заработать 🍬
+              </Typography>
+            </Button>
           
         </Box>
       </DialogTitle>
