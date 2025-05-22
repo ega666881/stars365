@@ -1,7 +1,7 @@
 // src/middleware/ip-whitelist.middleware.ts
 import { Request, Response, NextFunction } from 'express';
 
-const ALLOWED_IPS = ['127.0.0.1', '::1'];
+const ALLOWED_IPS = ['127.0.0.1', '::1', '::ffff:127.0.0.1'];
 
 export function IpWhitelistMiddleware(req: Request, res: Response, next: NextFunction) {
     const clientIp = req.ip || req.connection.remoteAddress;
