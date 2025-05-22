@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Box, Slide, Typography } from '@mui/material';
-import WheelOfFortune from './wheelOfFortune';
+
 import Header from './Header';
 import Footer from './footer';
 import mediaManager from '../../utils/mediaManager';
@@ -10,6 +10,9 @@ import BetModal from './changeBetModal/betModal';
 import { observer } from 'mobx-react';
 import clientStore from '../../stores/clientStore';
 import socketStore from '../../stores/socketStore';
+import x10SpinStore from '../../stores/x10SpinStore';
+import X10Spin from './x10Spin';
+import Toolbar from './toolbar';
 
 function MainPage() {
 
@@ -36,7 +39,15 @@ function MainPage() {
         <img src={mediaManager('tempEnergyImage')} />
         <Slide in={true} direction='up'>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                <SpinTest targetSegment={12} />
+                <Toolbar />
+                {x10SpinStore.x10 ? (<X10Spin 
+                    segments={[
+                        mediaManager('starsLogo'),
+                        mediaManager('starsLogo'),
+                        mediaManager('starsLogo'),
+                        mediaManager('starsLogo')
+                    ]}
+                />):(<SpinTest />)}
                
                 <StatsBar />
             </Box>

@@ -11,7 +11,7 @@ import spinStore from "../../stores/spinStore";
 const clickSound = new Audio(mediaManager("clickSound"));
 const finalSound = new Audio(mediaManager("finalSound"));
 
-function SpinTest({ segments = [] }) {
+function x10Spin({ targetSegment = null, segments = [] }) {
   const segmentList = segments.length > 0 ? segments : Array(16).fill({ image: null });
   const segmentCount = segmentList.length;
   const segmentAngle = 360 / segmentCount;
@@ -26,12 +26,9 @@ function SpinTest({ segments = [] }) {
   // Для ручного вращения
   const [isDragging, setIsDragging] = useState(false);
   const [manualRotation, setManualRotation] = useState(0);
-  const manualRotationRef = useRef(0);
+
   const wheelRef = useRef(null);
-  const lastX = useRef(0);
-  const lastY = useRef(0);
-  const lastTime = useRef(0);
-  const velocityRef = useRef(0);
+
 
   // Для вибрации и щелчка
   const vibrationIntensityRef = useRef(0);
@@ -54,7 +51,7 @@ function SpinTest({ segments = [] }) {
   // }, [true]);
 
   const getTargetSegment = () => {
-    if (spinStore.targetSegment !== null && spinStore.targetSegment >= 0 && spinStore.targetSegment < segmentCount) {
+    if (null !== null && spinStore.targetSegment >= 0 && spinStore.targetSegment < segmentCount) {
       return spinStore.targetSegment;
     }
     return Math.floor(Math.random() * segmentCount);
@@ -62,17 +59,15 @@ function SpinTest({ segments = [] }) {
 
   // Запуск вращения
   const handleSpin = useCallback((manualSpin = false) => {
-    if (!manualSpin) {
-      if (isSpinning) {
-        return;
-      }
+    console.log(!manualSpin)
+    if (isSpinning) {
+    return;
     }
 
     if (changeBetModalStore.bet.value > clientStore.user.balance) {
       spinStore.setAutoSpin(false);
     }
 
-    spinStore.makeBet();
     const target = getTargetSegment();
     const rotations = 5;
     const targetRotation = rotationRef.current + rotations * 360 + (segmentCount - target) * segmentAngle;
@@ -88,70 +83,9 @@ function SpinTest({ segments = [] }) {
     playClickSound();
     lastSegmentRef.current = -1;
     vibrationIntensityRef.current = 0;
-    
   }, [isSpinning, segmentCount, segmentAngle]);
 
-  // Обработка начала касания
-  const handleTouchStart = (e) => {
-    if (isSpinning) return;
-    const touch = e.touches[0];
-    const rect = wheelRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
 
-    const dx = touch.clientX - centerX;
-    const dy = touch.clientY - centerY;
-    const startAngle = Math.atan2(dy, dx) * (180 / Math.PI);
-
-    manualRotationRef.current = rotationRef.current;
-    lastX.current = touch.clientX;
-    lastY.current = touch.clientY;
-    lastTime.current = Date.now();
-    setIsDragging(true);
-  };
-
-  const handleTouchMove = (e) => {
-    if (!isDragging || isSpinning) return;
-    const touch = e.touches[0];
-    const rect = wheelRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    const dx = touch.clientX - centerX;
-    const dy = touch.clientY - centerY;
-    const currentAngle = Math.atan2(dy, dx) * (180 / Math.PI);
-    const deltaAngle = currentAngle - manualRotationRef.current;
-
-    setManualRotation((prev) => prev + deltaAngle);
-    manualRotationRef.current = currentAngle;
-
-    // Расчёт скорости свайпа
-    const now = Date.now();
-    const dt = now - lastTime.current;
-    const dxVel = touch.clientX - lastX.current;
-    const dyVel = touch.clientY - lastY.current;
-    const speed = Math.sqrt(dxVel * dxVel + dyVel * dyVel) / dt;
-
-    velocityRef.current = speed;
-    lastX.current = touch.clientX;
-    lastY.current = touch.clientY;
-    lastTime.current = now;
-  };
-
-  // Обработка окончания касания
-  const handleTouchEnd = () => {
-    if (isSpinning) return;
-    setIsDragging(false);
-    const velocity = velocityRef.current;
-
-    if (velocity > 0.5) {
-      handleSpin();
-    } else {
-      setManualRotation(0);
-    }
-
-    velocityRef.current = 0;
-  };
 
   // Обработка завершения анимации
   const handleAnimationComplete = useCallback(() => {
@@ -179,11 +113,6 @@ function SpinTest({ segments = [] }) {
 
       spinStore.resetCurrentGame();
       console.log(spinStore.autoSpin)
-      if (spinStore.autoSpin) {
-        
-        const spinTimeout = setTimeout(() => {handleSpin(true)}, 1000); // задержка перед следующим спином
-        return () => clearTimeout(spinTimeout);
-      }
     }
   }, [isSpinning, segmentAngle, handleSpin]);
 
@@ -193,7 +122,6 @@ function SpinTest({ segments = [] }) {
     
     
     const interval = setInterval(() => {
-      setRotation(getTargetSegment() * 22.3 * 5)
       const currentAngle = rotationRef.current % 360;
       const currentSegment = Math.floor(currentAngle / segmentAngle);
       
@@ -204,6 +132,7 @@ function SpinTest({ segments = [] }) {
         if ("vibrate" in navigator) {
           navigator.vibrate([intensity, 50]);
         }
+        setRotation(getTargetSegment() * 22.3 * 5)
         setArrowShake(true);
         setTimeout(() => setArrowShake(false), 80);
         playClickSound();
@@ -270,38 +199,38 @@ function SpinTest({ segments = [] }) {
 
   const renderSegmentImages = () => {
     return segmentList.map((segment, index) => {
-      const angle = (index * segmentAngle) - rotation - 5;
-      const radians = (angle * Math.PI) / 180;
-      const x = radius * Math.sin(radians);
-      const y = -radius * Math.cos(radians);
-
-      return (
-        <Box
-          key={index}
-          sx={{
-            position: "absolute",
-            top: `${wheelSize / 2 + y}px`,
-            left: `${wheelSize / 2 + x}px`,
-            transform: `translate(-50%, -50%) rotate(${angle}deg)`,
-            width: "auto",
-            height: "auto",
-            display: "flex",
-            justifyContent: "center",
-            pointerEvents: "none",
-            zIndex: 10
-          }}
-        >
-          {segment.image && (
-            <img
-              src={segment.image}
-              alt={`Сегмент ${index}`}
-              style={{ width: "30px", height: "30px" }}
-            />
-          )}
-        </Box>
-      );
-    });
-  };
+        const angle = (index * segmentAngle) - rotation;
+        const radians = (angle * Math.PI) / 180;
+        const x = radius * Math.sin(radians);
+        const y = -radius * Math.cos(radians);
+        
+        return (
+            <Box
+            key={index}
+            sx={{
+                position: "absolute",
+                top: `${wheelSize / 2 + y}px`,
+                left: `${wheelSize / 2 + x}px`,
+                transform: `translate(-50%, -50%) rotate(${angle}deg)`,
+                width: "auto",
+                height: "auto",
+                display: "flex",
+                justifyContent: "center",
+                pointerEvents: "none",
+                zIndex: 5555
+            }}
+            >
+            {segment && (
+                <img
+                src={segment}
+                alt={`Сегмент ${index}`}
+                style={{ width: "30px", height: "30px" }}
+                />
+            )}
+            </Box>
+        );
+        });
+    };
 
   return (
     <Box
@@ -339,14 +268,13 @@ function SpinTest({ segments = [] }) {
           cursor: isSpinning ? "default" : "grab"
         }}
         
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
+
       >
         <img
-          src={mediaManager("spinBackgroundImage")}
+          src={mediaManager("x10SpinBackgroundImage")}
           alt="Spin Background"
-          style={{ width: "100%", height: "auto" }}
+          style={{ width: "120%", height: "180%", transform: "translate(-8%, -22%)",}}
+          onClick={handleSpin}
         />
 
         {renderSegmentImages()}
@@ -460,4 +388,4 @@ function SpinTest({ segments = [] }) {
   );
 }
 
-export default observer(SpinTest);
+export default observer(x10Spin);

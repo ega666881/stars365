@@ -18,6 +18,7 @@ import peoplesGrayIcon from '../assets/Group.svg'
 import x10TextGrayIcon from '../assets/Group 45.svg'
 // import spinBackgroundImage from '../assets/Group 224.svg'
 import spinBackgroundImage from '../assets/Group 224 (1).svg'
+import x10SpinBackgroundImage from '../assets/Group 107.svg'
 import arrowSpinImage from '../assets/Union (3).svg'
 import elipceCenterSpinImage from '../assets/Ellipse 25.svg'
 import clickSound from '../assets/clickSound.mp3'
@@ -28,6 +29,9 @@ import x10ActiveIcon from '../assets/Group 233.png'
 import closeIcon from '../assets/Group 181.svg'
 import starsOutlinedImageDisabled from '../assets/Group (1).svg'
 import autoActiveIcon from '../assets/Group 282.png'
+import infoIcon from '../assets/Group 283.svg'
+import friendsIconOutlined from '../assets/Group 284.svg'
+
 
 function mediaManager(assetName) {
   const assets = {
@@ -60,6 +64,9 @@ function mediaManager(assetName) {
     closeIcon: closeIcon,
     starsOutlinedImageDisabled: starsOutlinedImageDisabled,
     autoActiveIcon: autoActiveIcon,
+    x10SpinBackgroundImage: x10SpinBackgroundImage,
+    infoIcon: infoIcon,
+    friendsIconOutlined: friendsIconOutlined,
   };
 
   if (assetName in assets) {

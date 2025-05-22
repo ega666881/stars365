@@ -3,6 +3,7 @@ import { Box, Button, Switch, Typography } from '@mui/material';
 import ImageSwitch from '../../sharedComponents/customSwitcher';
 import mediaManager from '../../utils/mediaManager';
 import spinStore from '../../stores/spinStore';
+import x10SpinStore from '../../stores/x10SpinStore';
 
 function Footer() {
 
@@ -28,7 +29,7 @@ function Footer() {
             <Box sx={{
                 
             }}>
-                <ImageSwitch onIcon={mediaManager('x10ActiveIcon')} offIcon={mediaManager('x10Icon')} onChange={() => {}} />
+                <ImageSwitch onIcon={mediaManager('x10ActiveIcon')} offIcon={mediaManager('x10Icon')} onChange={x10SpinStore.setX10} />
                 {/* <Typography variant="h6">x10</Typography> */}
             </Box>
             <Button 
