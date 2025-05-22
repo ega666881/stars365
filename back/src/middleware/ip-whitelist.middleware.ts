@@ -8,7 +8,7 @@ export class LocalhostOnlyMiddleware implements NestMiddleware {
 
     // Получаем IP клиента
     const ip = req.ip || req.connection.remoteAddress;
-
+    console.log(ip)
     if (!ip || !allowedIps.includes(ip.trim())) {
       return res.status(403).json({
         message: 'Доступ запрещён: разрешены только запросы с localhost',
