@@ -1,15 +1,20 @@
-// src/middleware/ip-whitelist.middleware.ts
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 
-const ALLOWED_IPS = ['127.0.0.1', '::1', '::ffff:127.0.0.1'];
+@Injectable()
+export class LocalhostOnlyMiddleware implements NestMiddleware {
+  use(req: Request, res: Response, next: NextFunction) {
+    const allowedIps = ['127.0.0.1', '::1'];
 
-export function IpWhitelistMiddleware(req: Request, res: Response, next: NextFunction) {
-    const clientIp = req.ip || req.connection.remoteAddress;
-    console.log(clientIp)
+    // Получаем IP клиента
+    const ip = req.ip || req.connection.remoteAddress;
 
-    if (ALLOWED_IPS.includes(clientIp)) {
-        return next();
+    if (!ip || !allowedIps.includes(ip.trim())) {
+      return res.status(403).json({
+        message: 'Доступ запрещён: разрешены только запросы с localhost',
+      });
     }
 
-    return res.status(403).json({ message: 'Access denied: IP not allowed' });
+    next();
+  }
 }
