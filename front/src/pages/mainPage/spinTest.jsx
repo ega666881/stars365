@@ -109,7 +109,6 @@ function SpinTest({ targetSegment = null, segments = [] }) {
     setIsDragging(true);
   };
 
-  // Обработка движения пальца
   const handleTouchMove = (e) => {
     if (!isDragging || isSpinning) return;
     const touch = e.touches[0];
@@ -156,7 +155,6 @@ function SpinTest({ targetSegment = null, segments = [] }) {
   // Обработка завершения анимации
   const handleAnimationComplete = useCallback(() => {
     if (isSpinning) {
-      const finalAngle = rotationRef.current % 360;
       setIsSpinning(false);
       spinStore.setIsSpinning(false);
       if (clientStore.user.balance < changeBetModalStore.bet.value) {
@@ -165,6 +163,7 @@ function SpinTest({ targetSegment = null, segments = [] }) {
       }
 
       if (spinStore.currentGame.win) {
+        console.log(spinStore.currentGame.win)
         setCurrentResult(`Выйграл ${spinStore.currentGame.coinCount}`)
         clientStore.updateUserBalance(1, spinStore.currentGame.coinCount)
 
@@ -180,7 +179,7 @@ function SpinTest({ targetSegment = null, segments = [] }) {
       spinStore.resetCurrentGame();
       console.log(spinStore.autoSpin)
       if (spinStore.autoSpin) {
-        setRotation(1500)
+        setRotation(-1500)
         const spinTimeout = setTimeout(() => {handleSpin(true)}, 1000); // задержка перед следующим спином
         return () => clearTimeout(spinTimeout);
       }
@@ -267,7 +266,6 @@ function SpinTest({ targetSegment = null, segments = [] }) {
     });
   };
 
-  // Генерация изображений на сегментах
   const renderSegmentImages = () => {
     return segmentList.map((segment, index) => {
       const angle = (index * segmentAngle) - rotation - 5;
