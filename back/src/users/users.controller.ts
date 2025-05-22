@@ -2,12 +2,14 @@ import { Controller, Post, Body, UseGuards, Get, Query, Param, Put } from '@nest
 import { UsersService } from './users.service';
 import { ApiTags } from '@nestjs/swagger';
 import { BetDto, BuySubscriptionDto, CreateInvoiceDto, CreateUserDto, GetUsersQuery, TakeReferalRewardDto, UpdateUserAvatarDto, WinUserStarsDto } from './users.dto';
+import { TelegramAuthGuard } from 'src/middleware/telegram.middleware';
 
 
 @Controller('users')
 export class UsersController {
     constructor(private readonly userService: UsersService) {}
 
+    @UseGuards(TelegramAuthGuard)
     @ApiTags('users')
     @Get('get-users')
     async getUsers(@Query() dto: GetUsersQuery) {
@@ -26,6 +28,7 @@ export class UsersController {
         return this.userService.buySubscriptionUser(dto)
     }
 
+    @UseGuards(TelegramAuthGuard)
     @ApiTags('users')
     @Post('take-day-reward')
     async takeDayReward(@Body() dto: CreateInvoiceDto) {
