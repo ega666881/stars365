@@ -113,6 +113,7 @@ function Header() {
                     borderRadius: 27,
                     borderColor: "red",
                     border: "1px solid",
+                    userSelect: 'none',
                 }}
                 onClick={() => navigate('/profile')}
                 />

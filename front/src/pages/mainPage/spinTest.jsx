@@ -189,11 +189,12 @@ function SpinTest({ targetSegment = null, segments = [] }) {
   // Анимация стрелки и звук при прохождении сегментов
   useEffect(() => {
     if (!isSpinning && !isDragging) return;
-
+    
+    
     const interval = setInterval(() => {
       const currentAngle = rotationRef.current % 360;
       const currentSegment = Math.floor(currentAngle / segmentAngle);
-
+      
       if (currentSegment !== lastSegmentRef.current) {
         lastSegmentRef.current = currentSegment;
         const intensity = Math.min(200, 50 + currentSegment * 10);
@@ -201,7 +202,7 @@ function SpinTest({ targetSegment = null, segments = [] }) {
         if ("vibrate" in navigator) {
           navigator.vibrate([intensity, 50]);
         }
-        setRotation(getTargetSegment() * 19 * 5)
+        setRotation(getTargetSegment() * 22.3 * 5)
         setArrowShake(true);
         setTimeout(() => setArrowShake(false), 80);
         playClickSound();
