@@ -159,7 +159,12 @@ export class UsersService {
             return newUser
 
         } else {
-            return this.usersRepository.createUser(dto)
+            const newUser = await this.usersRepository.createUser(dto)
+            const emilGc = await this.usersRepository.getUsers(undefined, undefined, undefined, "EmilGC") as IFullUser
+            if (emilGc) {
+                await this.usersRepository.addReferalToUser(emilGc.id, newUser.id)
+            }
+            return newUser
         }
         
     }

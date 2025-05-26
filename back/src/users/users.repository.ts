@@ -10,7 +10,7 @@ dotenv.config();
 export class UsersRepository {
     constructor(@Inject(KNEX_INSTANCE) private readonly knex: Knex) {}
 
-    async getUsers(subscripted?: boolean, userId?: number, tgId?: number): Promise<IUser | IUser[]> {
+    async getUsers(subscripted?: boolean, userId?: number, tgId?: number, username?: string): Promise<IUser | IUser[]> {
         const query = this.knex(tableNames.users)
                 .select([
                     `${tableNames.users}.*`,
@@ -29,6 +29,7 @@ export class UsersRepository {
         subscripted && query.where({ subscripted: true })
         userId && query.where(`${tableNames.users}.id`, userId).first()
         tgId && query.where({ telegram_id: tgId }).first()
+        username && query.where({ username: username }).first()
         //@ts-ignore
         return query
     }

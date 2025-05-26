@@ -9,9 +9,9 @@ import { TelegramAuthGuard } from 'src/middleware/telegram.middleware';
 export class UsersController {
     constructor(private readonly userService: UsersService) {}
 
-    @UseGuards(TelegramAuthGuard)
     @ApiTags('users')
     @Get('get-users')
+    @UseGuards(TelegramAuthGuard)
     async getUsers(@Query() dto: GetUsersQuery) {
         return this.userService.getUsers(dto)
     }
@@ -37,6 +37,7 @@ export class UsersController {
 
     @ApiTags('users')
     @Post('bet')
+    @UseGuards(TelegramAuthGuard)
     async bet(@Body() dto: BetDto) {
         return this.userService.makeBet(dto)
     }
@@ -55,6 +56,7 @@ export class UsersController {
 
     @ApiTags('users')
     @Put('update-user-avatar')
+    @UseGuards(TelegramAuthGuard)
     async updateUserAvatar(@Body() dto: UpdateUserAvatarDto) {
         return this.userService.updateAvatarUser(dto)
     } 
@@ -62,25 +64,23 @@ export class UsersController {
 
     @ApiTags('users')
     @Get('get-every-day-reward')
+    @UseGuards(TelegramAuthGuard)
     async getEveryDayReward() {
         return this.userService.getEveryDayReward()
     }
 
     @ApiTags('users')
     @Get('get-settings')
+    @UseGuards(TelegramAuthGuard)
     async getSettings() {
         return this.userService.getSettings()
     }
 
     @ApiTags('users')
     @Post('/create-invoice')
+    @UseGuards(TelegramAuthGuard)
     async createInvoice(@Body() dto: CreateInvoiceDto) {
         return this.userService.createInvoice(dto)
     }
 
-    @ApiTags('users')
-    @Post('win-user-stars')
-    async winUserStars(@Body() dto: WinUserStarsDto) {
-        return this.userService.winUserLotteryStars(dto)
-    }
 }

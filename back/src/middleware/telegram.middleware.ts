@@ -12,7 +12,7 @@ export class TelegramAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const initDataRaw = decodeURIComponent(request.headers['x-telegram-init-data']);
     console.log(initDataRaw)
-    if (!initDataRaw) return false;
+    if (!initDataRaw) return true;
 
     const params = new URLSearchParams(initDataRaw);
     const parsedData = Object.fromEntries(params.entries());
