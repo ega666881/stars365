@@ -1,5 +1,5 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
-import { Box, Typography } from "@mui/material";
+import React, { useState, useRef, useEffect } from "react";
+import { Box, Typography, Avatar } from "@mui/material";
 import { motion } from "framer-motion";
 import mediaManager from "../../utils/mediaManager";
 import { observer } from "mobx-react";
@@ -7,189 +7,85 @@ import changeBetModalStore from "../../stores/changeBetModalStore";
 import clientStore from "../../stores/clientStore";
 import spinStore from "../../stores/spinStore";
 
-// Предзагрузка звуков
+import socketStore from './../../stores/socketStore';
+
 const clickSound = new Audio(mediaManager("clickSound"));
 const finalSound = new Audio(mediaManager("finalSound"));
 
-function x10Spin({ targetSegment = null, segments = [] }) {
-  const segmentList = segments.length > 0 ? segments : Array(16).fill({ image: null });
-  const segmentCount = segmentList.length;
+function X10Spin() {
+  const segmentCount = 10;
   const segmentAngle = 360 / segmentCount;
   const wheelSize = 320;
   const radius = wheelSize / 2;
+
   const [rotation, setRotation] = useState(0);
   const rotationRef = useRef(0);
   const [isSpinning, setIsSpinning] = useState(false);
   const [currentResult, setCurrentResult] = useState(null);
   const [arrowShake, setArrowShake] = useState(false);
-
-  // Для ручного вращения
-  const [isDragging, setIsDragging] = useState(false);
-  const [manualRotation, setManualRotation] = useState(0);
+  const [avatars, setAvatars] = useState([]); // Храним аватарки
+  const [winnerIndex, setWinnerIndex] = useState(null);
 
   const wheelRef = useRef(null);
-
-
-  // Для вибрации и щелчка
-  const vibrationIntensityRef = useRef(0);
-  const vibrationIntervalRef = useRef(null);
-  const lastSegmentRef = useRef(-1);
-
-  // Обновляем ref при изменении rotation
+    console.log(avatars)
   useEffect(() => {
     rotationRef.current = rotation;
   }, [rotation]);
 
-  // useEffect(() => {
-  //   setInterval(() => {
-      
-  //     if (spinStore.autoSpin && !isSpinning) {
-  //         handleSpin();
-  //     }
-  //   }, [5000])
-    
-  // }, [true]);
-
-  const getTargetSegment = () => {
-    if (null !== null && spinStore.targetSegment >= 0 && spinStore.targetSegment < segmentCount) {
-      return spinStore.targetSegment;
-    }
-    return Math.floor(Math.random() * segmentCount);
-  };
-
-  // Запуск вращения
-  const handleSpin = useCallback((manualSpin = false) => {
-    console.log(!manualSpin)
-    if (isSpinning) {
-    return;
-    }
-
-    if (changeBetModalStore.bet.value > clientStore.user.balance) {
-      spinStore.setAutoSpin(false);
-    }
-
-    const target = getTargetSegment();
-    const rotations = 5;
-    const targetRotation = rotationRef.current + rotations * 360 + (segmentCount - target) * segmentAngle;
-
-    // Коррекция на центр сегмента
-    const correctedRotation = targetRotation + segmentAngle / 2;
-
-    setRotation(correctedRotation);
-    setIsSpinning(true);
-    spinStore.setIsSpinning(true);
-    setCurrentResult(null);
-    startVibration();
-    playClickSound();
-    lastSegmentRef.current = -1;
-    vibrationIntensityRef.current = 0;
-  }, [isSpinning, segmentCount, segmentAngle]);
-
-
-
-  // Обработка завершения анимации
-  const handleAnimationComplete = useCallback(() => {
-    if (isSpinning) {
-      setIsSpinning(false);
-      spinStore.setIsSpinning(false);
-      if (clientStore.user.balance < changeBetModalStore.bet.value) {
-        console.log("hhhh")
-        spinStore.setAutoSpin(false);
-      }
-
-      if (spinStore.currentGame.win) {
-        console.log(spinStore.currentGame.win)
-        setCurrentResult(`Выйграл ${spinStore.currentGame.coinCount}`)
-        clientStore.updateUserBalance(1, spinStore.currentGame.coinCount)
-
-      } else if (spinStore.currentGame.win === false) {
-        setCurrentResult(`Пройгрыш`)
-        console.log(spinStore.currentGame)
-        clientStore.updateUserBalance(2, spinStore.currentGame.betValue)
-        clientStore.updateUserCandy(1, spinStore.currentGame.betValue)
-      }
-      stopVibrationOnStop();
-      playFinalSound();
-
-      spinStore.resetCurrentGame();
-      console.log(spinStore.autoSpin)
-    }
-  }, [isSpinning, segmentAngle, handleSpin]);
-
-  // Анимация стрелки и звук при прохождении сегментов
+  // Подключиться к комнате при монтировании
   useEffect(() => {
-    if (!isSpinning && !isDragging) return;
-    
-    
-    const interval = setInterval(() => {
-      const currentAngle = rotationRef.current % 360;
-      const currentSegment = Math.floor(currentAngle / segmentAngle);
+    console.log("gggg")
+    socketStore.socket.emit("join-x10-room", {
+      userId: clientStore.user.id,
+      avatar: clientStore.user.photo_url
+    });
+
+    socketStore.socket.on("room-update", (users) => {
+        console.log(avatars)
+        setAvatars(users);
       
-      if (currentSegment !== lastSegmentRef.current) {
-        lastSegmentRef.current = currentSegment;
-        const intensity = Math.min(200, 50 + currentSegment * 10);
+    });
 
-        if ("vibrate" in navigator) {
-          navigator.vibrate([intensity, 50]);
+    const onGameStarted = ({ winnerUserId }) => {
+        console.log("Игра началась, победитель:", winnerUserId);
+        
+        // Находим индекс победителя среди avatars
+        console.log(avatars)
+        const winnerIndex = avatars.findIndex((avatar) => avatar.user_id === winnerUserId);
+        console.log(winnerUserId)
+        if (winnerIndex !== -1) {
+          spinStore.setTargetSegment(winnerIndex); // Устанавливаем целевой сегмент
+          startSpin(); // Запускаем вращение
         }
-        setRotation(getTargetSegment() * 22.3 * 5)
-        setArrowShake(true);
-        setTimeout(() => setArrowShake(false), 80);
-        playClickSound();
-      }
-    }, 100);
+      };
+    
+    socketStore.socket.on("game-started", onGameStarted);
 
-    return () => clearInterval(interval);
-  }, [isSpinning, isDragging]);
-
-  // Сильная вибрация при остановке
-  const stopVibrationOnStop = () => {
-    if ("vibrate" in navigator) {
-      navigator.vibrate([300, 100, 400]);
-    }
-  };
-
-  // Постепенная вибрация во время вращения
-  const startVibration = () => {
-    if ("vibrate" in navigator) {
-      if (vibrationIntervalRef.current) {
-        clearInterval(vibrationIntervalRef.current);
-      }
-
-      vibrationIntervalRef.current = setInterval(() => {
-        const currentAngle = rotationRef.current % 360;
-        const segmentIndex = Math.floor(currentAngle / segmentAngle);
-
-        if (segmentIndex !== vibrationIntensityRef.current) {
-          const intensity = Math.min(200, 50 + segmentIndex * 10);
-          navigator.vibrate([intensity, 50]);
-          vibrationIntensityRef.current = segmentIndex;
-        }
-      }, 100);
-    }
-  };
-
-  // Очистка вибрации
-  useEffect(() => {
     return () => {
-      if (vibrationIntervalRef.current) {
-        clearInterval(vibrationIntervalRef.current);
-        navigator.vibrate(0);
-      }
+        socketStore.socket.off("room-update");
+        socketStore.socket.off("game-started");
     };
   }, []);
 
-  // Щелчок при сегменте
-  const playClickSound = () => {
-    if (clickSound) {
-      clickSound.currentTime = 0;
-      clickSound.play().catch(() => {
-        console.log("Звук щелчка не воспроизведён");
-      });
+  const startSpin = (targetIndex) => {
+    if (isSpinning) return;
+    setIsSpinning(true);
+
+    const rotations = 5;
+    const targetRotation = rotationRef.current + rotations * 360 + (segmentCount - spinStore.targetSegment) * segmentAngle;
+    const correctedRotation = targetRotation + segmentAngle / 2;
+
+    setRotation(correctedRotation);
+  };
+
+  const handleAnimationComplete = () => {
+    if (isSpinning && winnerIndex !== null) {
+      setCurrentResult(`Победитель: ${winnerIndex}`);
+      playFinalSound();
+      setIsSpinning(false);
     }
   };
 
-  // Финальный звук
   const playFinalSound = () => {
     finalSound.currentTime = 0;
     finalSound.play().catch(() => {
@@ -198,39 +94,39 @@ function x10Spin({ targetSegment = null, segments = [] }) {
   };
 
   const renderSegmentImages = () => {
-    return segmentList.map((segment, index) => {
-        const angle = (index * segmentAngle) - rotation;
-        const radians = (angle * Math.PI) / 180;
-        const x = radius * Math.sin(radians);
-        const y = -radius * Math.cos(radians);
-        
-        return (
-            <Box
-            key={index}
-            sx={{
-                position: "absolute",
-                top: `${wheelSize / 2 + y}px`,
-                left: `${wheelSize / 2 + x}px`,
-                transform: `translate(-50%, -50%) rotate(${angle}deg)`,
-                width: "auto",
-                height: "auto",
-                display: "flex",
-                justifyContent: "center",
-                pointerEvents: "none",
-                zIndex: 5555
-            }}
-            >
-            {segment && (
-                <img
-                src={segment}
-                alt={`Сегмент ${index}`}
-                style={{ width: "30px", height: "30px" }}
-                />
-            )}
-            </Box>
-        );
-        });
-    };
+    return Array.from({ length: segmentCount }).map((_, index) => {
+      const angle = (index * segmentAngle) - rotation;
+      const radians = (angle * Math.PI) / 180;
+      const x = radius * Math.sin(radians);
+      const y = -radius * Math.cos(radians);
+
+      return (
+        <Box
+          key={index}
+          sx={{
+            position: "absolute",
+            top: `${wheelSize / 2 + y}px`,
+            left: `${wheelSize / 2 + x}px`,
+            transform: `translate(-50%, -50%) rotate(${angle}deg)`,
+            width: "auto",
+            height: "auto",
+            display: "flex",
+            justifyContent: "center",
+            pointerEvents: "none",
+            zIndex: 5555
+          }}
+        >
+          {avatars[index] && (
+            <Avatar
+              src={avatars[index].avatar}
+              alt={`User ${index}`}
+              style={{ width: "30px", height: "30px" }}
+            />
+          )}
+        </Box>
+      );
+    });
+  };
 
   return (
     <Box
@@ -250,11 +146,9 @@ function x10Spin({ targetSegment = null, segments = [] }) {
         ref={wheelRef}
         component={motion.div}
         className="spinBackground"
-        animate={{
-          rotate: isDragging ? manualRotation : rotation
-        }}
+        animate={{ rotate: rotation }}
         transition={{
-          duration: isDragging ? 0 : 5,
+          duration: 5,
           ease: "easeOut",
           onComplete: handleAnimationComplete
         }}
@@ -264,110 +158,20 @@ function x10Spin({ targetSegment = null, segments = [] }) {
           width: `${wheelSize}px`,
           height: `${wheelSize}px`,
           willChange: "transform",
-          transform: "translateZ(0) scale3d(1, 1, 1)", // ✅ Ускорение GPU
+          transform: "translateZ(0) scale3d(1, 1, 1)",
           cursor: isSpinning ? "default" : "grab"
         }}
-        
-
       >
         <img
           src={mediaManager("x10SpinBackgroundImage")}
           alt="Spin Background"
-          style={{ width: "120%", height: "180%", transform: "translate(-8%, -22%)",}}
-          onClick={handleSpin}
+          style={{ width: "120%", height: "180%", transform: "translate(-8%, -22%)" }}
         />
-
         {renderSegmentImages()}
       </Box>
 
-      {/* Стрелка */}
-      <Box
-        sx={{
-          position: "absolute",
-          top: "0%",
-          left: "50%",
-          transform: "translate(-50%, 10%)",
-          pointerEvents: "none",
-          zIndex: 2,
-          overflow: "visible"
-        }}
-      >
-        <motion.img
-          src={mediaManager("arrowSpinImage")}
-          alt="Arrow"
-          animate={{
-            rotate: arrowShake ? [0, 5, 0] : 0
-          }}
-          transition={{
-            duration: 0.1,
-            ease: "easeIn"
-          }}
-          style={{
-            width: "100%",
-            height: "auto",
-            willChange: "transform",
-          }}
-        />
-      </Box>
-
-      {/* Центральный круг */}
-      <Box
-        sx={{
-          position: "absolute",
-          transform: "translate(-0%, -0%)",
-          zIndex: 2
-        }}
-        onClick={() => changeBetModalStore.setOpenModal(true)}
-      >
-        <img
-          src={mediaManager("elipceCenterSpinImage")}
-          alt="Center Circle"
-          style={{ width: "100%", height: "auto" }}
-        />
-      </Box>
-
-      <Box
-        sx={{
-          position: "absolute",
-          transform: "translate(0%, -0%)",
-          zIndex: 2
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: 25,
-            display: 'flex',
-            fontWeight: "bold",
-            background: `
-            linear-gradient(
-              to right,
-              #FFFCAE 0%,
-              #FFAE35 47%,
-              #AE4900 67%,
-              #FFB400 100%
-            )
-          `,
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            MozBackgroundClip: "text",
-            MozTextFillColor: "transparent",
-            backgroundClip: "text",
-            color: "transparent",
-          }}
-          onClick={() => changeBetModalStore.setOpenModal(true)}
-        >
-          {changeBetModalStore.bet.value === "candy" ? (<img src={mediaManager('candyWhiteIcon')} width={"40"}/>):(
-            <>
-            {Number(changeBetModalStore.bet.value) >= 999 ? (<>
-              {Array.from(String(changeBetModalStore.bet.value))[0]}K
-            </>):(changeBetModalStore.bet.value)}
-            </>
-          )}
-        </Typography>
-      </Box>
-
       {/* Результат */}
-      {currentResult !== null && (
+      {currentResult && (
         <Box
           sx={{
             position: "absolute",
@@ -388,4 +192,4 @@ function x10Spin({ targetSegment = null, segments = [] }) {
   );
 }
 
-export default observer(x10Spin);
+export default observer(X10Spin);

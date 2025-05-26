@@ -23,6 +23,10 @@ class SpinStore {
         makeAutoObservable(this);
     }
 
+    setTargetSegment = action((newValue) => {
+        this.targetSegment = newValue
+    })
+
     setIsSpinning = action((newValue) => {
         this.isSpinning = newValue
     })

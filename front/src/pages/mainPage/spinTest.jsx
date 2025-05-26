@@ -169,7 +169,7 @@ function SpinTest({ segments = [] }) {
         clientStore.updateUserBalance(1, spinStore.currentGame.coinCount)
 
       } else if (spinStore.currentGame.win === false) {
-        setCurrentResult(`Пройгрыш`)
+        setCurrentResult(`Попробуй еще раз`)
         console.log(spinStore.currentGame)
         clientStore.updateUserBalance(2, spinStore.currentGame.betValue)
         clientStore.updateUserCandy(1, spinStore.currentGame.betValue)
