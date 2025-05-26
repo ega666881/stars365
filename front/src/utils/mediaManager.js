@@ -31,7 +31,7 @@ import starsOutlinedImageDisabled from '../assets/Group (1).svg'
 import autoActiveIcon from '../assets/Group 282.png'
 import infoIcon from '../assets/Group 283.svg'
 import friendsIconOutlined from '../assets/Group 284.svg'
-
+import starsMiniIcon from '../assets/Group 112.svg'
 
 function mediaManager(assetName) {
   const assets = {
@@ -67,6 +67,7 @@ function mediaManager(assetName) {
     x10SpinBackgroundImage: x10SpinBackgroundImage,
     infoIcon: infoIcon,
     friendsIconOutlined: friendsIconOutlined,
+    starsMiniIcon: starsMiniIcon,
   };
 
   if (assetName in assets) {

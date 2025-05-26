@@ -335,7 +335,7 @@ function SpinTest({ segments = [] }) {
           width: `${wheelSize}px`,
           height: `${wheelSize}px`,
           willChange: "transform",
-          transform: "translateZ(0) scale3d(1, 1, 1)", // ✅ Ускорение GPU
+          transform: "translateZ(0) scale3d(1, 1, 1)",
           cursor: isSpinning ? "default" : "grab"
         }}
         
@@ -430,9 +430,13 @@ function SpinTest({ segments = [] }) {
         >
           {changeBetModalStore.bet.value === "candy" ? (<img src={mediaManager('candyWhiteIcon')} width={"40"}/>):(
             <>
-            {Number(changeBetModalStore.bet.value) >= 999 ? (<>
+            {Number(changeBetModalStore.bet.value) >= 999 ? (<Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
               {Array.from(String(changeBetModalStore.bet.value))[0]}K
-            </>):(changeBetModalStore.bet.value)}
+              <img src={mediaManager('starsMiniIcon')} />
+            </Box>):(<Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+              {changeBetModalStore.bet.value}
+              <img src={mediaManager('starsMiniIcon')} />
+            </Box>)}
             </>
           )}
         </Typography>
