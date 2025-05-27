@@ -83,7 +83,7 @@ const BetModal = () => {
               variant={changeBetModalStore.bet.value === option.value ? 'outlined' : 'text'}
               color="primary"
               fullWidth
-              onClick={() => changeBetModalStore.setBetValue(option)}
+              onClick={() => {changeBetModalStore.setBetValue(option); changeBetModalStore.setOpenModal(false)}}
               sx={{
                 borderRadius: '20px',
                 borderColor: '#878787',
