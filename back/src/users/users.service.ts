@@ -3,9 +3,9 @@ import { KNEX_INSTANCE, tableNames } from '../database/database.constants';
 import { Inject } from '@nestjs/common';
 import { Knex } from 'knex';
 import { UsersRepository } from './users.repository';
-import { BetDto, BuySubscriptionDto, CreateInvoiceDto, CreateUserDto, GetUsersQuery, TakeReferalRewardDto, UpdateUserAvatarDto, WinUserStarsDto } from './users.dto';
+import { BetDto, BuySubscriptionDto, CheckTaskDto, CreateInvoiceDto, CreateUserDto, GetUsersQuery, TakeReferalRewardDto, UpdateUserAvatarDto, WinUserStarsDto } from './users.dto';
 import * as dotenv from 'dotenv-ts';
-import { IBetPull, IFullUser, IUser } from './users.interface';
+import { IBetPull, IFullUser, ITask, ITaskUser, IUser } from './users.interface';
 import axios from 'axios'
 dotenv.config();
 
@@ -19,6 +19,52 @@ export class UsersService {
 
     async getUsers(dto: GetUsersQuery) {
         return this.usersRepository.getUsers(dto.subscripted, dto.userId, dto.tgId)
+    }
+
+    async checkTaskUser(dto: CheckTaskDto) {
+        const taskUser = await this.knex(tableNames.tasksUsers).select("*").where({userId: dto.userId, taskId: dto.taskId}).first()
+        if (taskUser) {
+            throw new HttpException("Пользователь уже выполнил это задание", HttpStatus.CONFLICT)
+
+        } else {
+            const user = await this.usersRepository.getUsers(undefined, dto.userId) as IFullUser
+            const task = await this.usersRepository.getTasks(dto.taskId) as ITask
+            switch(task.type) {
+                case "invite_friends": {
+                    const invitedFriends = await this.knex(tableNames.referals).count('* as total').where({userId: user.id}).first()
+                    console.log(invitedFriends)
+                    if (Number(invitedFriends.total) >= task.countToReward) {
+                        await this.usersRepository.updateUser({candy: this.knex.raw(`candy + ${task.reward}`)}, user.id)
+                        await this.usersRepository.addCompleteTaskUser(user.id, task.id)
+                        return {success: true}
+
+                    } else {
+                        throw new HttpException("Не выполнены требования", HttpStatus.CONFLICT)
+                    }
+                    break
+                }
+            }
+        }
+
+    }
+
+    
+
+    async getTasksUsers(userId: number) {
+        const tasks = await this.usersRepository.getTasks()
+        const tasksUsers = await this.knex(tableNames.tasksUsers).select('*').where({userId: userId}) as ITaskUser[]
+        const returnArray = []
+        for (let task of tasks) {
+            let complete = false
+            const findTaskInUser = tasksUsers.find(taskUser => taskUser.taskId)
+            if (findTaskInUser) {
+                complete = true
+            }
+
+            returnArray.push({...task, complete: complete})
+        }
+
+        return returnArray
     }
 
     async takeReferalReward(dto: TakeReferalRewardDto) {

@@ -53,6 +53,18 @@ export class UsersRepository {
         return updatedUser[0]
     }
 
+    async addCompleteTaskUser(userId: number, taskId: number) {
+        await this.knex(tableNames.tasksUsers).insert({userId: userId, taskId: taskId})
+        return true
+    }
+
+    async getTasks(taskId?: number) {
+        const query =  this.knex(tableNames.tasks).select('*')
+        taskId && query.where({id: taskId}).first()
+        return query
+
+    }
+
     async getBetsValue() {
         return this.knex(tableNames.betsPulls).select(['betValue as value', 'id']).orderBy('id', 'asc')
     }

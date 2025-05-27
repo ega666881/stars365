@@ -56,6 +56,18 @@ export class BetDto {
     readonly betId: number
 }
 
+export class CheckTaskDto {
+    @ApiProperty()
+    @IsNotEmpty()
+    @Validate(EntityExistsByIdRule, [tableNames.users])
+    readonly userId: number
+    @ApiProperty()
+    @IsNotEmpty()
+    @Validate(EntityExistsByIdRule, [tableNames.tasks])
+    readonly taskId: number
+}
+
+
 export class BuySubscriptionDto {
     @ApiProperty()
     @IsNotEmpty()

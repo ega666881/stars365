@@ -3,5 +3,7 @@ export const tableNames = {
     users: "users",
     settings: "settings",
     referals: "referals",
-    betsPulls: "betsPulls"
+    betsPulls: "betsPulls",
+    tasks: "tasks",
+    tasksUsers: "tasksUsers"
 }

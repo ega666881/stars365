@@ -26,6 +26,22 @@ export interface IFullUser extends IUser {
     referals: IUser[] | any
 }
 
+export interface ITask {
+    id?: number
+    title?: string
+    description?: string
+    type?: string
+    countToReward?: number
+    channel_url?: string
+    reward?: number
+}
+
+export interface ITaskUser {
+    id?: number
+    userId?: number
+    taskId?: number
+}
+
 export interface IBetPull {
     id?: number
     betValue?: number
