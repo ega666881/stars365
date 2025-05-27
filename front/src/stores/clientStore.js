@@ -1,5 +1,5 @@
 import { action, makeAutoObservable, set } from 'mobx';
-import { createInvoiceReq, getEveryDayRewardReq, getSettingsReq, getUsersReq, takeDayRewardReq, takeReferalRewardReq, updateUserAvatarReq } from '../utils/requests/users';
+import { checkTaskUserReq, createInvoiceReq, getEveryDayRewardReq, getSettingsReq, getTasksReq, getUsersReq, takeDayRewardReq, takeReferalRewardReq, updateUserAvatarReq } from '../utils/requests/users';
 import changeBetModalStore from './changeBetModalStore';
 import socketStore from './socketStore';
 
@@ -9,6 +9,7 @@ class ClientStore {
     settings = null
     everyDayReward = 0
     activeUsersCount = 0
+    tasks = []
 
     constructor() {
         makeAutoObservable(this);
@@ -60,10 +61,31 @@ class ClientStore {
     getEveryDayReward = action(async () => {
         const response = await getEveryDayRewardReq()
         switch(response.status) {
-        case 200: {
-            const data = await response.data;
-            this.everyDayReward = data
+            case 200: {
+                const data = await response.data;
+                this.everyDayReward = data
+            }
         }
+    })
+
+    checkTask = action(async (taskId) => {
+        const response = await checkTaskUserReq(this.user.id, taskId)
+        switch(response.status) {
+            case 201: {
+                const data = await response.data;
+                await this.getTasks()
+            }
+        }
+    })
+
+
+    getTasks = action(async () => {
+        const response = await getTasksReq(this.user.id)
+        switch(response.status) {
+            case 200: {
+                const data = await response.data;
+                this.tasks = data
+            }
         }
     })
 
@@ -79,6 +101,7 @@ class ClientStore {
             console.log(data)
             this.user = data;
             await updateUserAvatarReq(this.user.id, Telegram.WebApp?.initDataUnsafe?.user?.photo_url)
+            await this.getTasks()
         }
         }
     })

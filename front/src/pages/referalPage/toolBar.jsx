@@ -48,7 +48,9 @@ function ToolBar() {
                         textDecoration: 'none',
                         color: "white",
                     }}
-                    href={`https://t.me/share/url?url=https://t.me/starsgame365bot?start=${clientStore.user.id}&text=`}>
+                    href={`https://t.me/share/url?url=https://t.me/starsgame365bot?start=${clientStore.user.id}&text=Переходи в Stars Game 365\n
+                                                                                                                       И получи 365 возможностей собрать по 1 ⭐️\n
+                                                                                                                       С каждого активного пользователя🚀\n`}>
                     Пригласить
                 </a>
                 </Typography>

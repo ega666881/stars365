@@ -3,6 +3,8 @@ import { Box, Typography, Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import Task from './task';
+import clientStore from '../../../stores/clientStore';
+import { observer } from 'mobx-react';
 
 function TasksList() {
     const navigate = useNavigate()
@@ -34,24 +36,10 @@ function TasksList() {
                     marginTop: 1
                 }}
             >
-                {[
-                    {title: "Пригласи 5 друзей", checked: false}, 
-                    {title: "Пригласи 5 друзей", checked: true},
-                    {title: "Пригласи 5 друзей", checked: true},
-                    {title: "Пригласи 5 друзей", checked: true},
-                    {title: "Пригласи 5 друзей", checked: true},
-                    {title: "Пригласи 5 друзей", checked: true},
-                    {title: "Пригласи 5 друзей", checked: true},
-                    {title: "Пригласи 5 друзей", checked: true},
-                    {title: "Пригласи 5 друзей", checked: true},
-                    {title: "Пригласи 5 друзей", checked: true},
-
-                    {title: "Пригласи 5 друзей", checked: true},
-                    {title: "Пригласи 5 друзей", checked: true},
-                ].map((task) => (<Task title={task.title} checked={task.checked} />))}
+                {clientStore.tasks.map((task) => (<Task task={task} />))}
             </Box>
         </Box>
   );
 }
 
-export default TasksList;
+export default observer(TasksList);

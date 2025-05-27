@@ -165,7 +165,7 @@ function SpinTest({ segments = [] }) {
 
       if (spinStore.currentGame.win) {
         console.log(spinStore.currentGame.win)
-        setCurrentResult(`Выйграл ${spinStore.currentGame.coinCount}`)
+        setCurrentResult(`Вы получили ${spinStore.currentGame.coinCount}`)
         clientStore.updateUserBalance(1, spinStore.currentGame.coinCount)
 
       } else if (spinStore.currentGame.win === false) {

@@ -102,3 +102,26 @@ export const takeReferalRewardReq = async(userId) => {
   }
 };
 
+export const getTasksReq = async(userId) => {
+  try {
+    const response = await axios.get(`/users/get-task-user/${userId}`);
+    return response;
+
+  } catch (err) {
+    return err.response;
+  }
+};
+
+export const checkTaskUserReq = async(userId, taskId) => {
+  try {
+    const response = await axios.post(`/users/check-task-user/`, {
+      userId: userId,
+      taskId: taskId
+    });
+    return response;
+
+  } catch (err) {
+    return err.response;
+  }
+};
+

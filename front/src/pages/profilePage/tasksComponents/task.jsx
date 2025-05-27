@@ -1,9 +1,11 @@
 import React from 'react';
-import { Box, Typography, Avatar } from '@mui/material';
+import { Box, Typography, Avatar, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import mediaManager from '../../../utils/mediaManager';
+import { observer } from 'mobx-react';
+import clientStore from '../../../stores/clientStore';
 
-function Task({title, checked}) {
+function Task({task}) {
     const navigate = useNavigate()
     return (
         <Box
@@ -17,7 +19,7 @@ function Task({title, checked}) {
         >
             <Box>
                 <Typography>
-                    {title}
+                    {task.title}
                 </Typography>
             </Box>
             <Box 
@@ -27,24 +29,37 @@ function Task({title, checked}) {
                     backgroundColor: 'black',
                     borderRadius: 27,
                     border: '1px solid',
-                    borderColor: checked ? ('#7DC152'):('#878787'),
+                    borderColor: task.complete ? ('#7DC152'):('#878787'),
                     padding: 1,
                     width: "40%",
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}
             >
-                <Typography
-                    sx={{
-                        color: checked ? ("#7DC152"):('white'),
-                    }}
-                >
-                    {checked ? ("Выполнено"):("Выполнить")}
-                </Typography>
-                {checked && <img src={mediaManager('successGreenIcon')} />}
+                {task.complete ? (
+                    <Button
+                        sx={{
+                            color: "#7DC152",
+                            padding: 0
+                        }}
+                    >
+                        Выполнено
+                    </Button>
+                ):(
+                    <Button
+                        sx={{
+                            color: 'white',
+                            padding: 0
+                        }}
+                        onClick={() => clientStore.checkTask(task.id)}
+                    >
+                        Выполнить
+                    </Button>
+                )}
+                {task.complete && <img src={mediaManager('successGreenIcon')} />}
             </Box>
         </Box>
   );
 }
 
-export default Task;
+export default observer(Task);
