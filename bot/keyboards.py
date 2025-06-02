@@ -1,20 +1,26 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 
 def startKeyboard():
     
     buttons = [
         [
-            # InlineKeyboardButton(
-            #         text = 'ТЫК СЮДА👆🏻',
-            #         web_app="https://t.me/starsgame365bot/app"
-            # ),
+            InlineKeyboardButton(
+                    text = 'ТЫК СЮДА👆🏻',
+                    web_app=WebAppInfo(url="https://app.starsgame365.top")
+            ),
+        ],
+        [
+            InlineKeyboardButton(
+                    text = 'Флудилка',
+                    url="https://t.me/StarsGame365Chat"
+            ),
+        ],
+        [
             InlineKeyboardButton(
                     text = 'Комьюнити',
                     url="https://t.me/starsgame365"
             ),
-            
-        ],
-        
+        ]
     ]
 
 

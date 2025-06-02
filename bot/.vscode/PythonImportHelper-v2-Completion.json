@@ -1,5 +1,109 @@
 [
     {
+        "label": "InlineKeyboardMarkup",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "InlineKeyboardButton",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "WebAppInfo",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "Message",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "FSInputFile",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "PreCheckoutQuery",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "SuccessfulPayment",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "CallbackQuery",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "Message",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "FSInputFile",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "ReplyKeyboardMarkup",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "KeyboardButton",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
+        "label": "KeyboardButtonPollType",
+        "importPath": "aiogram.types",
+        "description": "aiogram.types",
+        "isExtraImport": true,
+        "detail": "aiogram.types",
+        "documentation": {}
+    },
+    {
         "label": "FastAPI",
         "importPath": "fastapi",
         "description": "fastapi",
@@ -104,70 +208,6 @@
         "documentation": {}
     },
     {
-        "label": "Message",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
-        "documentation": {}
-    },
-    {
-        "label": "PreCheckoutQuery",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
-        "documentation": {}
-    },
-    {
-        "label": "SuccessfulPayment",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
-        "documentation": {}
-    },
-    {
-        "label": "CallbackQuery",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
-        "documentation": {}
-    },
-    {
-        "label": "Message",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
-        "documentation": {}
-    },
-    {
-        "label": "ReplyKeyboardMarkup",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
-        "documentation": {}
-    },
-    {
-        "label": "KeyboardButton",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
-        "documentation": {}
-    },
-    {
-        "label": "KeyboardButtonPollType",
-        "importPath": "aiogram.types",
-        "description": "aiogram.types",
-        "isExtraImport": true,
-        "detail": "aiogram.types",
-        "documentation": {}
-    },
-    {
         "label": "asyncio",
         "kind": 6,
         "isExtraImport": true,
@@ -239,6 +279,15 @@
         "documentation": {}
     },
     {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
         "label": "Command",
         "importPath": "aiogram.filters",
         "description": "aiogram.filters",
@@ -260,6 +309,24 @@
         "description": "aiogram.utils.keyboard",
         "isExtraImport": true,
         "detail": "aiogram.utils.keyboard",
+        "documentation": {}
+    },
+    {
+        "label": "keyboards",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "keyboards",
+        "description": "keyboards",
+        "detail": "keyboards",
+        "documentation": {}
+    },
+    {
+        "label": "startKeyboard",
+        "kind": 2,
+        "importPath": "keyboards",
+        "description": "keyboards",
+        "peekOfCode": "def startKeyboard():\n    buttons = [\n        [\n            InlineKeyboardButton(\n                    text = 'ТЫК СЮДА👆🏻',\n                    web_app=WebAppInfo(url=\"https://app.starsgame365.top\")\n            ),\n        ],\n        [\n            InlineKeyboardButton(",
+        "detail": "keyboards",
         "documentation": {}
     },
     {
@@ -312,7 +379,7 @@
         "kind": 5,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "storage = MemoryStorage()\ndp = Dispatcher()\nmy_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nasync def lotteryPerDay():",
+        "peekOfCode": "storage = MemoryStorage()\ndp = Dispatcher()\nmy_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nclass MessageRequest(BaseModel):",
         "detail": "main",
         "documentation": {}
     },
@@ -321,7 +388,7 @@
         "kind": 5,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "dp = Dispatcher()\nmy_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nasync def lotteryPerDay():\n    while True:",
+        "peekOfCode": "dp = Dispatcher()\nmy_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nclass MessageRequest(BaseModel):\n    telegram_id: str",
         "detail": "main",
         "documentation": {}
     },
@@ -330,7 +397,7 @@
         "kind": 5,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "my_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nasync def lotteryPerDay():\n    while True:\n        response = requests.get(f\"{BACKEND_IP}/users/get-users?subscripted=true\")",
+        "peekOfCode": "my_router = Router()\napp = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nclass MessageRequest(BaseModel):\n    telegram_id: str\n@my_router.pre_checkout_query(lambda query: True)",
         "detail": "main",
         "documentation": {}
     },
@@ -339,7 +406,7 @@
         "kind": 5,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "app = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nasync def lotteryPerDay():\n    while True:\n        response = requests.get(f\"{BACKEND_IP}/users/get-users?subscripted=true\")\n        users = response.json()",
+        "peekOfCode": "app = FastAPI()\nasync def set_webhook():\n    await bot.delete_webhook()  # Удаляем старый вебхук (если есть)\n    await bot.set_webhook(url=\"https://serenely-scholarly-bulbul.cloudpub.ru/webhook\",\n                           allowed_updates=dp.resolve_used_update_types(),\n                          drop_pending_updates=True)\nclass MessageRequest(BaseModel):\n    telegram_id: str\n@my_router.pre_checkout_query(lambda query: True)\nasync def pre_checkout_query(pre_checkout_q: types.PreCheckoutQuery):",
         "detail": "main",
         "documentation": {}
     },
