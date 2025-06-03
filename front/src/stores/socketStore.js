@@ -35,7 +35,7 @@ class SocketStore {
     socket.on('active-users-count', (data) => {
         
         if (data.clientId === socket.id) {
-            
+            clientStore.setSettings(data.settings)
             clientStore.setActiveUsersCount(data.total)  
         }
         

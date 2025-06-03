@@ -165,7 +165,13 @@ function SpinTest({ segments = [] }) {
 
       if (spinStore.currentGame.win) {
         console.log(spinStore.currentGame.win)
-        setCurrentResult(`Вы получили ${spinStore.currentGame.coinCount}`)
+        //setCurrentResult(`Вы получили ${spinStore.currentGame.coinCount}`)
+        if (spinStore.currentGame.jackpod) {
+          console.log("джекпод")
+        } else {
+          setCurrentResult(<img src="https://media.tenor.com/hDW3Dk9CyHQAAAAi/app-award.gif" />)
+        }
+        
         clientStore.updateUserBalance(1, spinStore.currentGame.coinCount)
 
       } else if (spinStore.currentGame.win === false) {
@@ -179,6 +185,7 @@ function SpinTest({ segments = [] }) {
 
       spinStore.resetCurrentGame();
       console.log(spinStore.autoSpin)
+      setTimeout(() => {setCurrentResult(null)}, [5000])
       if (spinStore.autoSpin) {
         
         const spinTimeout = setTimeout(() => {handleSpin(true)}, 1000); // задержка перед следующим спином
@@ -457,7 +464,8 @@ function SpinTest({ segments = [] }) {
             zIndex: 2
           }}
         >
-          {currentResult}
+          
+            {currentResult}
         </Box>
       )}
     </Box>

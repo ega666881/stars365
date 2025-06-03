@@ -8,6 +8,7 @@ import clientStore from "../../stores/clientStore";
 import spinStore from "../../stores/spinStore";
 
 import socketStore from './../../stores/socketStore';
+import x10SpinStore from "../../stores/x10SpinStore";
 
 const clickSound = new Audio(mediaManager("clickSound"));
 const finalSound = new Audio(mediaManager("finalSound"));
@@ -27,10 +28,27 @@ function X10Spin() {
   const [winnerIndex, setWinnerIndex] = useState(null);
 
   const wheelRef = useRef(null);
-    console.log(avatars)
+
+  const fixedPositions = [
+    { x: 315, y: 162 },
+    { x: 280, y: 250 },
+    { x: 208, y: 308 },
+    { x: 115, y: 305 },
+    { x: 35, y: 250 },
+    { x: 10, y: 162 },
+    { x: 36, y: 73 },
+    { x: 115, y: 15 },
+    { x: 208, y: 15 },
+    { x: 285, y: 70 },
+  ];
+
   useEffect(() => {
     rotationRef.current = rotation;
   }, [rotation]);
+
+  useEffect(() => {
+    setRotation(spinStore.targetSegment * 35.8)
+  }, [isSpinning])
 
   // Подключиться к комнате при монтировании
   useEffect(() => {
@@ -41,33 +59,32 @@ function X10Spin() {
     });
 
     socketStore.socket.on("room-update", (users) => {
-        console.log(avatars)
-        setAvatars(users);
-      
+      console.log(avatars)
+      setAvatars(users);
     });
 
     const onGameStarted = ({ winnerUserId }) => {
-        console.log("Игра началась, победитель:", winnerUserId);
-        
-        // Находим индекс победителя среди avatars
-        console.log(avatars)
-        const winnerIndex = avatars.findIndex((avatar) => avatar.user_id === winnerUserId);
-        console.log(winnerUserId)
-        if (winnerIndex !== -1) {
-          spinStore.setTargetSegment(winnerIndex); // Устанавливаем целевой сегмент
-          startSpin(); // Запускаем вращение
-        }
-      };
-    
+      console.log("Игра началась, победитель:", winnerUserId);
+      
+      // Находим индекс победителя среди avatars
+      const winnerIndex = avatars.findIndex((avatar) => avatar.user_id === winnerUserId);
+      console.log(winnerUserId)
+      if (winnerIndex !== -1) {
+        spinStore.setTargetSegment(winnerIndex); // Устанавливаем целевой сегмент
+        startSpin(); // Запускаем вращение
+      }
+    };
+
     socketStore.socket.on("game-started", onGameStarted);
 
     return () => {
-        socketStore.socket.off("room-update");
-        socketStore.socket.off("game-started");
+      socketStore.socket.off("room-update");
+      socketStore.socket.off("game-started");
     };
   }, []);
 
   const startSpin = (targetIndex) => {
+    console.log(isSpinning)
     if (isSpinning) return;
     setIsSpinning(true);
 
@@ -93,36 +110,41 @@ function X10Spin() {
     });
   };
 
-  const renderSegmentImages = () => {
-    return Array.from({ length: segmentCount }).map((_, index) => {
-      const angle = (index * segmentAngle) - rotation;
-      const radians = (angle * Math.PI) / 180;
-      const x = radius * Math.sin(radians);
-      const y = -radius * Math.cos(radians);
+  // Расчёт координат для аватарки
+  const getAvatarCoords = (index) => {
+    const centerX = wheelSize / 2;
+    const centerY = wheelSize / 2
+    const angle = (index * segmentAngle) - rotation; // Угол текущего сегмента
+    const radians = (angle * Math.PI) / 180; // Преобразуем угол в радианы
+    console.log(radians)
+    const x = centerX + radius * Math.cos(radians);
+    const y = centerY + radius * Math.sin(radians);
+    // x = x + (index * 25)
+    // y = y + (index)
+    return { x, y };
+  };
 
+  // Рендеринг аватарок
+  const renderSegmentImages = () => {
+    return avatars.map((avatar, index) => {
+      const pos = fixedPositions[index];
       return (
         <Box
           key={index}
           sx={{
             position: "absolute",
-            top: `${wheelSize / 2 + y}px`,
-            left: `${wheelSize / 2 + x}px`,
-            transform: `translate(-50%, -50%) rotate(${angle}deg)`,
-            width: "auto",
-            height: "auto",
-            display: "flex",
-            justifyContent: "center",
-            pointerEvents: "none",
-            zIndex: 5555
+            left: `${pos.x}px`,
+            top: `${pos.y}px`,
+            transform: "translate(-50%, -50%)",
+            zIndex: 5,
+            pointerEvents: "none"
           }}
         >
-          {avatars[index] && (
-            <Avatar
-              src={avatars[index].avatar}
-              alt={`User ${index}`}
-              style={{ width: "30px", height: "30px" }}
-            />
-          )}
+          <Avatar
+            src={avatar.avatar}
+            alt={`User ${index}`}
+            style={{ width: "59px", height: "59px" }}
+          />
         </Box>
       );
     });
@@ -168,6 +190,93 @@ function X10Spin() {
           style={{ width: "120%", height: "180%", transform: "translate(-8%, -22%)" }}
         />
         {renderSegmentImages()}
+      </Box>
+
+      <Box
+        sx={{
+          position: "absolute",
+          top: "0%",
+          left: "50%",
+          transform: "translate(-50%, 10%)",
+          pointerEvents: "none",
+          zIndex: 2,
+          overflow: "visible"
+        }}
+      >
+        <motion.img
+          src={mediaManager("arrowSpinImage")}
+          alt="Arrow"
+          animate={{
+            rotate: arrowShake ? [0, 5, 0] : 0
+          }}
+          transition={{
+            duration: 0.1,
+            ease: "easeIn"
+          }}
+          style={{
+            width: "100%",
+            height: "auto",
+            willChange: "transform",
+          }}
+        />
+      </Box>
+
+      {/* Центральный круг */}
+      <Box
+        sx={{
+          position: "absolute",
+          transform: "translate(-0%, -0%)",
+          zIndex: 2
+        }}
+      >
+        <img
+          src={mediaManager("elipceCenterSpinImage")}
+          alt="Center Circle"
+          style={{ width: "100%", height: "auto" }}
+        />
+      </Box>
+
+      <Box
+        sx={{
+          position: "absolute",
+          transform: "translate(0%, -0%)",
+          zIndex: 2
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: 25,
+            display: 'flex',
+            fontWeight: "bold",
+            background: `
+              linear-gradient(
+                to right,
+                #FFFCAE 0%,
+                #FFAE35 47%,
+                #AE4900 67%,
+                #FFB400 100%
+              )
+            `,
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            MozBackgroundClip: "text",
+            MozTextFillColor: "transparent",
+            backgroundClip: "text",
+            color: "transparent",
+          }}
+        >
+          {changeBetModalStore.bet.value === "candy" ? (<img src={mediaManager('candyWhiteIcon')} width={"40"}/>):(
+            <>
+            {Number(changeBetModalStore.bet.value) >= 999 ? (<Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+              {Array.from(String(changeBetModalStore.bet.value))[0]}K
+              <img src={mediaManager('starsMiniIcon')} />
+            </Box>):(<Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+              {changeBetModalStore.bet.value}
+              <img src={mediaManager('starsMiniIcon')} />
+            </Box>)}
+            </>
+          )}
+        </Typography>
       </Box>
 
       {/* Результат */}

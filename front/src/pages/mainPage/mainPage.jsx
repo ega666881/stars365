@@ -13,10 +13,17 @@ import socketStore from '../../stores/socketStore';
 import x10SpinStore from '../../stores/x10SpinStore';
 import X10Spin from './x10Spin';
 import Toolbar from './toolbar';
+import { useParams } from 'react-router-dom';
+import { formatNumber } from './../../utils/formatNumber';
 
 function MainPage() {
+    const {id} = useParams()
 
     useEffect(() => {
+        
+        if (id) {
+            clientStore.getUser(id)
+        }
         socketStore.sendUserLogin({id: clientStore.user.id})
     }, [])
 
@@ -36,7 +43,44 @@ function MainPage() {
                 <Header />
             </Box>
         </Slide>
-        <img src={mediaManager('tempEnergyImage')} />
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}
+        >
+            <Typography
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 2,
+                    fontFamily: 'Roboto',
+                    fontSize: '28px',
+                    fontWeight: 'bold',
+                    background: `
+                    linear-gradient(
+                    to right,
+                    #FFFCAE 0%,
+                    #FFAE35 47%,
+                    #AE4900 67%,
+                    #FFB400 100%
+                    )
+                `,
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    MozBackgroundClip: "text",
+                    MozTextFillColor: "transparent",
+                    backgroundClip: "text",
+                    color: "transparent",
+                }}
+            >
+                <img src={mediaManager('jackPodIcon')} />
+                {formatNumber(Math.round(clientStore.settings.jackpod))}
+            </Typography>  
+        </Box>
         <Slide in={true} direction='up'>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <Toolbar />

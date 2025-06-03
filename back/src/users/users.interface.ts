@@ -55,4 +55,7 @@ export interface ISettings {
     starsPullLottery?: number | any
     tonPullRoulette?: number
     lotteryDate?: Date | any
+    jackpod?: number | any
+    spinCountJackpod?: number | any
+    spinCountPresent?: number | any
 }

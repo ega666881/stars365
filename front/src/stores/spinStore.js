@@ -51,11 +51,17 @@ class SpinStore {
                 const data = await response.data;
                 console.log(data)
                 if (data.win) {
-                    this.targetSegment = this.winSegments[data.reward]
+                    if (data.reward === 'jackpod') {
+                        this.targetSegment = this.looseSegments[Math.floor(Math.random() * this.looseSegments.length)]
+
+                    } else {
+                        this.targetSegment = this.winSegments[data.reward]
+                    }
                     this.currentGame = {
                         betValue: changeBetModalStore.bet.value,
                         coinCount: data.winCount,
                         win: true,
+                        jackpod: data.reward === 'jackpod'
                     }
 
                 } else {
@@ -64,7 +70,8 @@ class SpinStore {
                     this.currentGame = {
                         betValue: changeBetModalStore.bet.value,
                         coinCount: data.winCount,
-                        win: false
+                        win: false,
+                        jackpod: data.reward === 'jackpod'
                     }
                 }
                 break

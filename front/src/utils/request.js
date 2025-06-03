@@ -1,1 +1,1 @@
-export const backendIp = 'https://stirringly-glorious-leopard.cloudpub.ru';
+export const backendIp = 'http://127.0.0.1:8000';

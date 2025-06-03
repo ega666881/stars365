@@ -98,6 +98,7 @@ export class UsersService {
             throw new HttpException("У пользователя недостаточно баланса", HttpStatus.CONFLICT)
 
         } else {
+            const settings = await this.usersRepository.getSettings()
             const winRewards = []
             if (betPull.betValue * 10 <= betPull.x10) {
                 winRewards.push("x10")
@@ -107,6 +108,9 @@ export class UsersService {
 
             } else if (betPull.betValue <= betPull.x1) {
                 winRewards.push("x1")
+
+            } else if (settings.spinCountJackpod >= process.env.SPIN_COUNT_JACKPOD) {
+                winRewards.push("jackpod")
             }
 
             if (winRewards.length > 0) {
@@ -124,13 +128,28 @@ export class UsersService {
                     }
                     
                     case "x1": {
-                        winCount = betPull.betValue
+                        winCount = 0
+                        break
+                    }
+                    case "jackpod": {
+                        winCount = settings.jackpod
                         break
                     }
                 }
                 const updatedData = {}
-                updatedData[reward] = this.knex.raw(`${reward} - ${winCount}`)
-                await this.usersRepository.betValueUpdate(updatedData, betPull.id)
+                if (reward === 'x1') {
+                    updatedData[reward] = this.knex.raw(`${reward} - ${betPull.betValue}`)
+                } else {
+                    updatedData[reward] = this.knex.raw(`${reward} - ${winCount}`)
+                }
+                if (reward === 'jackpod') {
+                    await this.usersRepository.updateSettings({jackpod: 0, spinCountJackpod: 0})
+
+                } else {
+                    console.log("Sfsdf")
+                    await this.usersRepository.betValueUpdate(updatedData, betPull.id)
+                }
+                
                 await this.usersRepository.updateUser({balance: this.knex.raw(`balance + ${winCount}`)}, dto.userId)
                 if (user.referalUser) {
                     await this.knex(tableNames.referals).update({reward: this.knex.raw(`reward + ${winCount / 100 * 1}`)}).where({referalId: user.id})
@@ -146,12 +165,17 @@ export class UsersService {
                 const x10Pull = betPull.betValue / 2
                 const x3Pull = (betPull.betValue * 20) / 100
                 const x1Pull = (betPull.betValue * 10) / 100
+                const jackpodPull = (betPull.betValue * 5) / 100
                 await this.usersRepository.betValueUpdate({
                         x10: this.knex.raw(`x10 + ${x10Pull}`),
                         x3: this.knex.raw(`x3 + ${x3Pull}`),
                         x1: this.knex.raw(`x1 + ${x1Pull}`),
                     }, betPull.id
                 )
+                await this.usersRepository.updateSettings({
+                    jackpod: this.knex.raw(`jackpod + ${jackpodPull}`), 
+                    spinCountJackpod: this.knex.raw(`"spinCountJackpod" + 1`)
+                })
                 return {win: false, winCount: 0}
             }
         }

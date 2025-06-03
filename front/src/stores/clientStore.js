@@ -15,6 +15,10 @@ class ClientStore {
         makeAutoObservable(this);
     }
 
+    setSettings = action((newValue) => {
+        this.settings = newValue
+    })
+
     setActiveUsersCount = action((newValue) => {
         this.activeUsersCount = newValue
     })
