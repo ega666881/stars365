@@ -40,6 +40,10 @@ class SocketStore {
         }
         
     });
+    
+    socket.on('win-user', (data) => {
+      clientStore.setWinUserBar(data)
+  });
   }
 
   

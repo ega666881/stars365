@@ -10,10 +10,15 @@ class ClientStore {
     everyDayReward = 0
     activeUsersCount = 0
     tasks = []
+    winUserBar = null
 
     constructor() {
         makeAutoObservable(this);
     }
+
+    setWinUserBar = action((newValue) => {
+        this.winUserBar = newValue
+    })
 
     setSettings = action((newValue) => {
         this.settings = newValue

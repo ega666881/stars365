@@ -7,6 +7,7 @@ import { BetDto, BuySubscriptionDto, CheckTaskDto, CreateInvoiceDto, CreateUserD
 import * as dotenv from 'dotenv-ts';
 import { IBetPull, IFullUser, ITask, ITaskUser, IUser } from './users.interface';
 import axios from 'axios'
+import { SocketGateway } from 'src/socket/socket.gateway';
 dotenv.config();
 
 
@@ -14,7 +15,8 @@ dotenv.config();
 export class UsersService {
     constructor(
             @Inject(KNEX_INSTANCE) private readonly knex: Knex,
-            private readonly usersRepository: UsersRepository
+            private readonly usersRepository: UsersRepository,
+            private readonly socketGateway: SocketGateway
         ) {}
 
     async getUsers(dto: GetUsersQuery) {
@@ -139,6 +141,7 @@ export class UsersService {
                 const updatedData = {}
                 if (reward === 'x1') {
                     updatedData[reward] = this.knex.raw(`${reward} - ${betPull.betValue}`)
+
                 } else {
                     updatedData[reward] = this.knex.raw(`${reward} - ${winCount}`)
                 }
@@ -155,6 +158,17 @@ export class UsersService {
                     await this.knex(tableNames.referals).update({reward: this.knex.raw(`reward + ${winCount / 100 * 1}`)}).where({referalId: user.id})
 
                 }
+                const now = new Date();
+                const hours = String(now.getHours()).padStart(2, '0');    
+                const minutes = String(now.getMinutes()).padStart(2, '0'); 
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                this.socketGateway.server.emit('win-user', {
+                    username: user.username,
+                    photo_url: user.photo_url,
+                    value: winCount,
+                    type: "wheel",
+                    time: `${hours}:${minutes}:${seconds}`
+                })
                 return {win: true, winCount: winCount, reward: reward}
 
             } else {

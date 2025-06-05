@@ -1,9 +1,11 @@
 import React from 'react';
-import { Box, Button, Switch, Typography } from '@mui/material';
+import { Box, Button, Switch, Typography, Avatar } from '@mui/material';
 import ImageSwitch from '../../sharedComponents/customSwitcher';
 import mediaManager from '../../utils/mediaManager';
 import spinStore from '../../stores/spinStore';
 import x10SpinStore from '../../stores/x10SpinStore';
+import clientStore from '../../stores/clientStore';
+import { formatNumber } from '../../utils/formatNumber';
 
 function Footer() {
 
@@ -50,52 +52,67 @@ function Footer() {
                 <ImageSwitch onIcon={mediaManager('autoActiveIcon')} offIcon={mediaManager('autoIcon')} onChange={spinStore.setAutoSpin} checked={spinStore.autoSpin}/>
             </Box>
         </Box>
-        <Box
-            sx={{
-                backgroundColor: 'black', 
-                padding: 0.05,
-                borderRadius: 27,
-                width: "100%",
-                marginRight: 1,
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginTop: 2,
-                height: 40,
-            }}
-        >
-            <Typography 
-                variant="h6"
+        {clientStore.winUserBar && 
+            <Box
                 sx={{
-                    color: '#878787',
-                    width: "100%"
-                }}
-            >@EmilGC </Typography>
-            <Typography 
-                variant="h6" 
-                display={'flex'} 
-                alignItems={'center'}
-                width={"80%"}
-                >
-                    <img src={mediaManager('starsOutlinedImage')} />7.555K
-                </Typography>
-            <Typography variant="h6" 
-                sx={{
-                    display: 'flex', 
+                    backgroundColor: 'black', 
+                    padding: 0.05,
+                    borderRadius: 27,
+                    width: "100%",
+                    marginRight: 1,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                     alignItems: 'center',
-                    color: '#878787',
-                    width: "50%"
-                }}>
-                16:47*20
-                <img src={mediaManager('x10Icon')} 
-                    style={{
-                        
+                    marginTop: 2,
+                    height: 40,
+                }}
+            >
+                <Avatar 
+                    alt="User"
+                    src={clientStore.winUserBar.photo_url}
+                    sx={{
+                        display: 'flex',
+                        width: 30,
+                        height: 30,
+                        borderRadius: 27,
+                        borderColor: "red",
+                        border: "1px solid",
                     }}
-                    />
-                </Typography>
-             
-        </Box>
+                    onClick={() => navigate('/profile')}
+                />
+                <Typography 
+                    variant="h6"
+                    sx={{
+                        color: '#878787',
+                        width: "100%"
+                    }}
+                >{clientStore.winUserBar.username} </Typography>
+                <Typography 
+                    variant="h6" 
+                    display={'flex'} 
+                    alignItems={'center'}
+                    width={"80%"}
+                    >
+                        <img src={mediaManager('starsOutlinedImage')} />{formatNumber(clientStore.winUserBar.value)}
+                    </Typography>
+                <Typography variant="h6" 
+                    sx={{
+                        display: 'flex', 
+                        alignItems: 'center',
+                        color: '#878787',
+                        width: "50%"
+                    }}>
+                    {clientStore.winUserBar.time}
+                    <img src={mediaManager('x10Icon')} 
+                        style={{
+                            
+                        }}
+                        />
+                    </Typography>
+                
+            </Box>
+        }
         </Box>
     );
 }

@@ -30,16 +30,16 @@ function X10Spin() {
   const wheelRef = useRef(null);
 
   const fixedPositions = [
-    { x: 315, y: 162 },
-    { x: 280, y: 250 },
-    { x: 208, y: 308 },
-    { x: 115, y: 305 },
-    { x: 35, y: 250 },
-    { x: 10, y: 162 },
-    { x: 36, y: 73 },
-    { x: 115, y: 15 },
-    { x: 208, y: 15 },
-    { x: 285, y: 70 },
+    { x: 290, y: 162 },
+    { x: 260, y: 230 },
+    { x: 200, y: 285 },
+    { x: 120, y: 285 },
+    { x: 55, y: 230 },
+    { x: 35, y: 162 },
+    { x: 55, y: 85 },
+    { x: 120, y: 35 },
+    { x: 200, y: 35 },
+    { x: 260, y: 85 },
   ];
 
   useEffect(() => {
@@ -187,7 +187,7 @@ function X10Spin() {
         <img
           src={mediaManager("x10SpinBackgroundImage")}
           alt="Spin Background"
-          style={{ width: "120%", height: "180%", transform: "translate(-8%, -22%)" }}
+          style={{ width: "100%", height: "100%", transform: "translate(-0%, -0%)" }}
         />
         {renderSegmentImages()}
       </Box>
