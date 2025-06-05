@@ -162,13 +162,15 @@ export class UsersService {
                 const hours = String(now.getHours()).padStart(2, '0');    
                 const minutes = String(now.getMinutes()).padStart(2, '0'); 
                 const seconds = String(now.getSeconds()).padStart(2, '0');
-                this.socketGateway.server.emit('win-user', {
-                    username: user.username,
-                    photo_url: user.photo_url,
-                    value: winCount,
-                    type: "wheel",
-                    time: `${hours}:${minutes}:${seconds}`
-                })
+                if (reward !== "x1") {
+                    this.socketGateway.server.emit('win-user', {
+                        username: user.username,
+                        photo_url: user.photo_url,
+                        value: winCount,
+                        type: "wheel",
+                        time: `${hours}:${minutes}:${seconds}`
+                    })
+                }
                 return {win: true, winCount: winCount, reward: reward}
 
             } else {
