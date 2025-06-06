@@ -15,7 +15,6 @@ async def start(message: Message, bot: Bot):
 
     body = {
         "telegram_id": message.from_user.id, 
-        "username": message.from_user.username,
         "first_name": message.from_user.first_name,
         "last_name": message.from_user.last_name,
         "photo_url": ""
@@ -25,6 +24,12 @@ async def start(message: Message, bot: Bot):
 
     except Exception as e:
         pass
+
+    if (message.from_user.username):
+        body['username'] = message.from_user.username
+    
+    else:
+        body['username'] = ''
 
     print(body)
     response = requests.post('http://127.0.0.1:8000/api/users/create-user', json.dumps(body), headers={'content-type': 'application/json'})

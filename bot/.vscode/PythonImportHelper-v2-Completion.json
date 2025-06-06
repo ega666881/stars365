@@ -415,7 +415,7 @@
         "kind": 5,
         "importPath": "start",
         "description": "start",
-        "peekOfCode": "router = Router(name=__name__)\n@router.message(CommandStart())\nasync def start(message: Message, bot: Bot):\n    body = {\n        \"telegram_id\": message.from_user.id, \n        \"username\": message.from_user.username,\n        \"first_name\": message.from_user.first_name,\n        \"last_name\": message.from_user.last_name,\n        \"photo_url\": \"\"\n        }",
+        "peekOfCode": "router = Router(name=__name__)\n@router.message(CommandStart())\nasync def start(message: Message, bot: Bot):\n    body = {\n        \"telegram_id\": message.from_user.id, \n        \"first_name\": message.from_user.first_name,\n        \"last_name\": message.from_user.last_name,\n        \"photo_url\": \"\"\n        }\n    try:",
         "detail": "start",
         "documentation": {}
     }
