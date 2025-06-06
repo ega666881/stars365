@@ -95,7 +95,6 @@ export class CreateUserDto {
     @IsOptional()
     readonly last_name: string
     @ApiProperty()
-    @IsNotEmpty()
     readonly username: string
     @ApiProperty()
     readonly photo_url: string
