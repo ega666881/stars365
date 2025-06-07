@@ -109,7 +109,7 @@ class ClientStore {
             await this.getEveryDayReward()
             console.log(data)
             this.user = data;
-            await updateUserAvatarReq(this.user.id, Telegram.WebApp?.initDataUnsafe?.user?.photo_url)
+            await updateUserAvatarReq(this.user.id, Telegram.WebApp?.initDataUnsafe?.user?.photo_url, Telegram.WebApp?.initDataUnsafe?.user?.username)
             await this.getTasks()
         }
         }
