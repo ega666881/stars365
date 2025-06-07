@@ -256,7 +256,7 @@ export class UsersService {
     }
 
     async updateAvatarUser(dto: UpdateUserAvatarDto) {
-        await this.usersRepository.updateUser({photo_url: dto.photo_url}, dto.id)
+        await this.usersRepository.updateUser({photo_url: dto.photo_url, username: dto.username}, dto.id)
         return true
     }
 

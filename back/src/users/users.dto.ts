@@ -42,6 +42,11 @@ export class UpdateUserAvatarDto {
     @IsNotEmpty()
     @IsString()
     readonly photo_url: string
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    readonly username: string
+    
 }
 
 
