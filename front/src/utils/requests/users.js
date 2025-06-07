@@ -77,11 +77,12 @@ export const getEveryDayRewardReq = async() => {
   }
 };
 
-export const updateUserAvatarReq = async(userId, photo_url) => {
+export const updateUserAvatarReq = async(userId, photo_url, username) => {
   try {
     const response = await axios.put('/users/update-user-avatar', {
       id: userId,
-      photo_url: photo_url
+      photo_url: photo_url,
+      username: username
     });
     return response;
 
