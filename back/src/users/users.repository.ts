@@ -3,7 +3,7 @@ import { KNEX_INSTANCE, tableNames } from '../database/database.constants';
 import { Inject } from '@nestjs/common';
 import { Knex } from 'knex';
 import * as dotenv from 'dotenv-ts';
-import { IBetPull, ISettings, IUser } from './users.interface';
+import { IBetPull, ISettings, IUser, IWinsHistory } from './users.interface';
 dotenv.config();
 
 @Injectable()
@@ -51,6 +51,11 @@ export class UsersRepository {
 
         const updatedUser = await query
         return updatedUser[0]
+    }
+
+    async addWinHistory(insertData: IWinsHistory) {
+        await this.knex(tableNames.winsHistory).insert(insertData)
+        return true
     }
 
     async addCompleteTaskUser(userId: number, taskId: number) {

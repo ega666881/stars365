@@ -23,7 +23,7 @@ function StatsBar() {
             <Box
                 sx={{
                     display: 'flex',
-                    width: '100%',
+                    width: '50%',
                     flexDirection: 'row',
                     alignItems: 'center',
                     gap: 1,
@@ -46,6 +46,7 @@ function StatsBar() {
                     width: '50%',
                     flexDirection: 'row',
                     alignItems: 'center',
+                    justifyContent: 'end',
                     gap: 1,
                 }}
             >
@@ -55,7 +56,7 @@ function StatsBar() {
                         fontSize: 20
                     }}
                 >
-                    367.816
+                    0
                 </Typography>
                 <img src={mediaManager('peoplesGrayIcon')} />
                 <img src={mediaManager('x10TextGrayIcon')} />

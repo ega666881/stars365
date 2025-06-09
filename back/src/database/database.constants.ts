@@ -5,5 +5,6 @@ export const tableNames = {
     referals: "referals",
     betsPulls: "betsPulls",
     tasks: "tasks",
-    tasksUsers: "tasksUsers"
+    tasksUsers: "tasksUsers",
+    winsHistory: "winsHistory",
 }

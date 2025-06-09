@@ -46,6 +46,8 @@ export class DailyTaskService implements OnModuleInit, OnModuleDestroy {
         .update({winStarsBalance: this.knex.raw(`"winStarsBalance" + ${users.length}`)})
         .where({id: winUser.id})
     
+    await this.knex(tableNames.winsHistory).delete()
+
     const currentDate = new Date()
     currentDate.setTime(currentDate.getTime() + (24 * 60 * 60 * 1000))
     await this.knex<ISettings>(tableNames.settings)

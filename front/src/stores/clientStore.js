@@ -11,10 +11,17 @@ class ClientStore {
     activeUsersCount = 0
     tasks = []
     winUserBar = null
+    winsUsersHistoryOpen = false
+
+    winsUsers = []
 
     constructor() {
         makeAutoObservable(this);
     }
+
+    setWinsUsersHistoryOpen = action((newValue) => {
+        this.winsUsersHistoryOpen = newValue
+    })
 
     setWinUserBar = action((newValue) => {
         this.winUserBar = newValue
@@ -26,6 +33,10 @@ class ClientStore {
 
     setActiveUsersCount = action((newValue) => {
         this.activeUsersCount = newValue
+    })
+
+    setWinsUsers = action((newValue) => {
+        this.winsUsers = newValue
     })
 
     takeReferalReward = action(async () => {
@@ -115,6 +126,10 @@ class ClientStore {
         }
     })
 
+
+    setUser = action(async (user) => {
+        this.user = user
+    })
 
     createInvoice = action(async (navigate) => {
         const response = await createInvoiceReq(this.user.id)

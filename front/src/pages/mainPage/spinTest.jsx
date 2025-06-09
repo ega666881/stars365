@@ -165,20 +165,20 @@ function SpinTest({ segments = [] }) {
 
       if (spinStore.currentGame.win) {
         console.log(spinStore.currentGame.win)
-        //setCurrentResult(`Вы получили ${spinStore.currentGame.coinCount}`)
-        if (spinStore.currentGame.jackpod) {
-          console.log("джекпод")
-        } else {
-          setCurrentResult(<img src="https://media.tenor.com/hDW3Dk9CyHQAAAAi/app-award.gif" />)
-        }
+        setCurrentResult(`Вы получили ${spinStore.currentGame.coinCount}`)
+        // if (spinStore.currentGame.jackpod) {
+        //   console.log("джекпод")
+        // } else {
+        //   setCurrentResult(<img src="https://media.tenor.com/hDW3Dk9CyHQAAAAi/app-award.gif" />)
+        // }
         
-        clientStore.updateUserBalance(1, spinStore.currentGame.coinCount)
+        // clientStore.updateUserBalance(1, spinStore.currentGame.coinCount)
 
       } else if (spinStore.currentGame.win === false) {
         setCurrentResult(`Попробуй еще раз`)
         console.log(spinStore.currentGame)
-        clientStore.updateUserBalance(2, spinStore.currentGame.betValue)
-        clientStore.updateUserCandy(1, spinStore.currentGame.betValue)
+        // clientStore.updateUserBalance(2, spinStore.currentGame.betValue)
+        // clientStore.updateUserCandy(1, spinStore.currentGame.betValue)
       }
       stopVibrationOnStop();
       playFinalSound();

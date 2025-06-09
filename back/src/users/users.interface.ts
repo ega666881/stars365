@@ -50,6 +50,15 @@ export interface IBetPull {
     x1?: number | any
 }
 
+
+export interface IWinsHistory {
+    id?: number
+    username?: string
+    value?: string
+    time?: string
+    photo_url?: string
+}
+
 export interface ISettings {
     id?: number
     starsPullLottery?: number | any

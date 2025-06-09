@@ -15,6 +15,7 @@ import X10Spin from './x10Spin';
 import Toolbar from './toolbar';
 import { useParams } from 'react-router-dom';
 import { formatNumber } from './../../utils/formatNumber';
+import WinsHistory from './winsHistory';
 
 function MainPage() {
     const {id} = useParams()
@@ -81,6 +82,11 @@ function MainPage() {
                 {formatNumber(Math.round(clientStore.settings.jackpod))}
             </Typography>  
         </Box>
+        <Slide in={clientStore.winsUsersHistoryOpen} direction='up'>
+            <Box>
+                <WinsHistory />
+            </Box>
+        </Slide>
         <Slide in={true} direction='up'>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <Toolbar />

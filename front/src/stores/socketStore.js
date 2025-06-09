@@ -33,17 +33,16 @@ class SocketStore {
     });
 
     socket.on('active-users-count', (data) => {
-        
         if (data.clientId === socket.id) {
             clientStore.setSettings(data.settings)
             clientStore.setActiveUsersCount(data.total)  
+            clientStore.setWinsUsers(data.winsHistory)
         }
-        
     });
     
     socket.on('win-user', (data) => {
-      clientStore.setWinUserBar(data)
-  });
+        clientStore.setWinUserBar(data)
+    });
   }
 
   

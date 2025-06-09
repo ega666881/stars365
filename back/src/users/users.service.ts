@@ -95,7 +95,7 @@ export class UsersService {
     
     async makeBet(dto: BetDto) {
         const betPull = await this.usersRepository.getBetsPulls(dto.betId) as IBetPull
-        const user = await this.usersRepository.getUsers(undefined, dto.userId) as IFullUser
+        let user = await this.usersRepository.getUsers(undefined, dto.userId) as IFullUser
         if (user.balance < betPull.betValue) {
             throw new HttpException("У пользователя недостаточно баланса", HttpStatus.CONFLICT)
 
@@ -153,11 +153,13 @@ export class UsersService {
                     await this.usersRepository.betValueUpdate(updatedData, betPull.id)
                 }
                 
-                await this.usersRepository.updateUser({balance: this.knex.raw(`balance + ${winCount}`)}, dto.userId)
+                
                 if (user.referalUser) {
                     await this.knex(tableNames.referals).update({reward: this.knex.raw(`reward + ${winCount / 100 * 1}`)}).where({referalId: user.id})
 
                 }
+                //@ts-ignore
+                user = await this.usersRepository.updateUser({balance: this.knex.raw(`balance + ${winCount}`)}, dto.userId)
                 const now = new Date();
                 const hours = String(now.getHours()).padStart(2, '0');    
                 const minutes = String(now.getMinutes()).padStart(2, '0'); 
@@ -170,14 +172,21 @@ export class UsersService {
                         type: "wheel",
                         time: `${hours}:${minutes}:${seconds}`
                     })
+                    await this.usersRepository.addWinHistory({
+                        username: user.username,
+                        photo_url: user.photo_url,
+                        value: String(winCount),
+                        time: `${hours}:${minutes}:${seconds}`,
+                    })
                 }
-                return {win: true, winCount: winCount, reward: reward}
+                return {win: true, winCount: winCount, reward: reward, user: user}
 
             } else {
-                await this.usersRepository.updateUser({
+                //@ts-ignore
+                user = await this.usersRepository.updateUser({
                     balance: this.knex.raw(`balance - ${betPull.betValue}`),
                     candy: this.knex.raw(`candy + ${betPull.betValue}`)
-                }, dto.userId)
+                }, dto.userId) as IUser
                 const x10Pull = betPull.betValue / 2
                 const x3Pull = (betPull.betValue * 20) / 100
                 const x1Pull = (betPull.betValue * 10) / 100
@@ -192,7 +201,7 @@ export class UsersService {
                     jackpod: this.knex.raw(`jackpod + ${jackpodPull}`), 
                     spinCountJackpod: this.knex.raw(`"spinCountJackpod" + 1`)
                 })
-                return {win: false, winCount: 0}
+                return {win: false, winCount: 0, user: user}
             }
         }
         

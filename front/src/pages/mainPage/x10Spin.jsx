@@ -110,21 +110,6 @@ function X10Spin() {
     });
   };
 
-  // Расчёт координат для аватарки
-  const getAvatarCoords = (index) => {
-    const centerX = wheelSize / 2;
-    const centerY = wheelSize / 2
-    const angle = (index * segmentAngle) - rotation; // Угол текущего сегмента
-    const radians = (angle * Math.PI) / 180; // Преобразуем угол в радианы
-    console.log(radians)
-    const x = centerX + radius * Math.cos(radians);
-    const y = centerY + radius * Math.sin(radians);
-    // x = x + (index * 25)
-    // y = y + (index)
-    return { x, y };
-  };
-
-  // Рендеринг аватарок
   const renderSegmentImages = () => {
     return avatars.map((avatar, index) => {
       const pos = fixedPositions[index];

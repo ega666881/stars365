@@ -57,6 +57,7 @@ class SpinStore {
                     } else {
                         this.targetSegment = this.winSegments[data.reward]
                     }
+                    clientStore.setUser(data.user)
                     this.currentGame = {
                         betValue: changeBetModalStore.bet.value,
                         coinCount: data.winCount,
@@ -67,6 +68,7 @@ class SpinStore {
                 } else {
                     this.targetSegment = this.looseSegments[Math.floor(Math.random() * this.looseSegments.length)]
                     this.win = false
+                    clientStore.setUser(data.user)
                     this.currentGame = {
                         betValue: changeBetModalStore.bet.value,
                         coinCount: data.winCount,
