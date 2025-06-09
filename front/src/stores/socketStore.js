@@ -37,6 +37,7 @@ class SocketStore {
             clientStore.setSettings(data.settings)
             clientStore.setActiveUsersCount(data.total)  
             clientStore.setWinsUsers(data.winsHistory)
+            clientStore.setWinUserBar(data.winsHistory[0])
         }
     });
     
