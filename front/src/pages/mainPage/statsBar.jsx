@@ -57,7 +57,7 @@ function StatsBar() {
                     }}
                 >
                     0
-                </Typography>
+0                </Typography>
                 <img src={mediaManager('peoplesGrayIcon')} />
                 <img src={mediaManager('x10TextGrayIcon')} />
             </Box>

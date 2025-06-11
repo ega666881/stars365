@@ -11,6 +11,8 @@ import {
 import changeBetModalStore from '../../../stores/changeBetModalStore';
 import { observer } from 'mobx-react';
 import mediaManager from '../../../utils/mediaManager';
+import x10SpinStore from '../../../stores/x10SpinStore';
+import clientStore from '../../../stores/clientStore';
 
 const BetModal = () => {
 
@@ -48,30 +50,32 @@ const BetModal = () => {
             >
                 <img  src={mediaManager('closeIcon')} />
             </IconButton>
-            <Button
-              key={'candy'}
-              variant={changeBetModalStore.bet.value === 'candy' ? 'outlined' : 'text'}
-              color="primary"
-              fullWidth
-              onClick={() => changeBetModalStore.setBetValue({value: "candy"})}
-              sx={{
-                borderRadius: '20px',
-                borderColor: '#878787',
-                padding: '12px',
-                '&.Mui-disabled': { opacity: 0.5 },
-              }}
-            >
-              <Typography
+            {!x10SpinStore.x10 && 
+              <Button
+                key={'candy'}
+                variant={changeBetModalStore.bet.value === 'candy' ? 'outlined' : 'text'}
+                color="primary"
+                fullWidth
+                onClick={() => changeBetModalStore.setBetValue({value: "candy"})}
                 sx={{
-                    color: changeBetModalStore.bet.value === 'candy' ? 'white':'#878787',
-                    fontSize: '20px',
-                    display: 'flex',
-                    gap: 0.3,
+                  borderRadius: '20px',
+                  borderColor: '#878787',
+                  padding: '12px',
+                  '&.Mui-disabled': { opacity: 0.5 },
                 }}
               >
-                Заработать 🍬
-              </Typography>
-            </Button>
+                <Typography
+                  sx={{
+                      color: changeBetModalStore.bet.value === 'candy' ? 'white':'#878787',
+                      fontSize: '20px',
+                      display: 'flex',
+                      gap: 0.3,
+                  }}
+                >
+                  Заработать 🍬
+                </Typography>
+              </Button>
+            }
           
         </Box>
       </DialogTitle>
@@ -83,6 +87,7 @@ const BetModal = () => {
               variant={changeBetModalStore.bet.value === option.value ? 'outlined' : 'text'}
               color="primary"
               fullWidth
+              disabled={option.value > clientStore.user.balance ? (true): (false)}
               onClick={() => {changeBetModalStore.setBetValue(option); changeBetModalStore.setOpenModal(false)}}
               sx={{
                 borderRadius: '20px',
@@ -99,7 +104,7 @@ const BetModal = () => {
                     gap: 0.3,
                 }}
               >
-                {option.value}
+                {option.value > clientStore.user.balance ? (<>пополните счет</>): (option.value)} 
                 <img src={mediaManager(changeBetModalStore.betValue === option.value ? 'starsOutlinedImage':'starsOutlinedImageDisabled')} />
               </Typography>
             </Button>

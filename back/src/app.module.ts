@@ -5,14 +5,16 @@ import { UsersService } from './users/users.service';
 import { UsersModule } from './users/users.module';
 import { DailyTaskService } from './lotteryStars/lotteryTaskServise';
 import { SocketGateway } from './socket/socket.gateway';
+import { SocketModule } from './socket/socket.module';
 
 
 @Module({
   imports: [
     DatabaseModule,
     UsersModule,
+    SocketModule,
   ],
   controllers: [],
-  providers: [DailyTaskService, SocketGateway],
+  providers: [DailyTaskService],
 })
 export class AppModule {}

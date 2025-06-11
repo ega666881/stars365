@@ -50,6 +50,7 @@ export class UpdateUserAvatarDto {
 }
 
 
+
 export class BetDto {
     @ApiProperty()
     @IsNotEmpty()
@@ -60,6 +61,14 @@ export class BetDto {
     @Validate(EntityExistsByIdRule, [tableNames.betsPulls])
     readonly betId: number
 }
+
+export class BetCandyDto {
+    @ApiProperty()
+    @IsNotEmpty()
+    @Validate(EntityExistsByIdRule, [tableNames.users])
+    readonly userId: number
+}
+
 
 export class CheckTaskDto {
     @ApiProperty()

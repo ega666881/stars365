@@ -4,10 +4,11 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { UsersRepository } from './users.repository';
 import { SocketGateway } from 'src/socket/socket.gateway';
+import { SocketModule } from 'src/socket/socket.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, SocketModule],
   controllers: [UsersController],
-  providers: [UsersService, UsersRepository, SocketGateway]
+  providers: [UsersService, UsersRepository]
 })
 export class UsersModule {}

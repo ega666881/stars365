@@ -77,6 +77,18 @@ export const getEveryDayRewardReq = async() => {
   }
 };
 
+export const betCandyReq = async(userId) => {
+  try {
+    const response = await axios.post('/users/bet-candy', {
+      userId: userId,
+    });
+    return response;
+
+  } catch (err) {
+    return err.response;
+  }
+};
+
 export const updateUserAvatarReq = async(userId, photo_url, username) => {
   try {
     const response = await axios.put('/users/update-user-avatar', {
@@ -90,6 +102,16 @@ export const updateUserAvatarReq = async(userId, photo_url, username) => {
     return err.response;
   }
 };
+export const getRoomUserReq = async(userId) => {
+  try {
+    const response = await axios.get(`/users/get-room-user/${userId}`);
+    return response;
+
+  } catch (err) {
+    return err.response;
+  }
+};
+
 
 export const takeReferalRewardReq = async(userId) => {
   try {

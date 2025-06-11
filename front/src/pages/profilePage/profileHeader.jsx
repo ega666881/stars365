@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import mediaManager from '../../utils/mediaManager';
 import { observer } from 'mobx-react';
 import clientStore from '../../stores/clientStore';
+import BalanceAnimation from '../mainPage/balanceAnimation/balanceAnimation';
 
 function ProfileHeader({backLink}) {
     const navigate = useNavigate()
@@ -39,7 +40,6 @@ function ProfileHeader({backLink}) {
                 }}
                 
             >
-                
                 <Typography
                     sx={{
                         display: 'flex',
@@ -52,30 +52,8 @@ function ProfileHeader({backLink}) {
                         {clientStore.user.winStarsBalance}
                         <img src={mediaManager('starsOutlinedImage')} />
                 </Typography>
-                <Typography
-                    sx={{
-                        display: 'flex',
-                        gap: 1,
-                        fontFamily: "Roboto",
-                        fontSize: "20px",
-                        fontWeight: 'bold'
-                    }}
-                    >
-                        {clientStore.user.balance}
-                        <img src={mediaManager('starsOutlinedImage')} />
-                </Typography>
-                <Typography 
-                    sx={{
-                        display: 'flex',
-                        fontFamily: "Roboto",
-                        fontSize: "20px",
-                        fontWeight: 'bold',
-                        gap: 0.5,
-                    }}
-                >
-                    {clientStore.user.candy}
-                    <img src={mediaManager('candyWhiteIcon')} />
-                </Typography>
+                <BalanceAnimation typeBalance={Number(clientStore.user.balance)} image={"starsOutlinedImage"} elementId={"balanceProfile"}/>
+                <BalanceAnimation typeBalance={Number(clientStore.user.candy)} image={"candyWhiteIcon"} elementId={"candyProfile"}/>
             </Box>
             <Avatar 
                 alt="User"

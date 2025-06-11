@@ -72,7 +72,12 @@ function SpinTest({ segments = [] }) {
       spinStore.setAutoSpin(false);
     }
 
-    spinStore.makeBet();
+    if (changeBetModalStore.bet.value === "candy") {
+      spinStore.makeBetCandy()
+
+    } else {
+      spinStore.makeBet();
+    }
     const target = getTargetSegment();
     const rotations = 5;
     const targetRotation = rotationRef.current + rotations * 360 + (segmentCount - target) * segmentAngle;
@@ -156,30 +161,30 @@ function SpinTest({ segments = [] }) {
   // Обработка завершения анимации
   const handleAnimationComplete = useCallback(() => {
     if (isSpinning) {
+      console.log("fsdf")
       setIsSpinning(false);
       spinStore.setIsSpinning(false);
-      if (clientStore.user.balance < changeBetModalStore.bet.value) {
-        console.log("hhhh")
-        spinStore.setAutoSpin(false);
+      if (changeBetModalStore.bet.value !== "candy") {
+        if (clientStore.user.balance < changeBetModalStore.bet.value) {
+          console.log("hhhh")
+          spinStore.setAutoSpin(false);
+        }
+  
+      }
+      if (spinStore.currentGame && spinStore.currentGame.user) {
+          console.log(spinStore.currentGame.user)
+          clientStore.setUser(spinStore.currentGame.user)
+          if (spinStore.currentGame.win) {
+            console.log(spinStore.currentGame.win)
+            setCurrentResult(`Вы получили ${spinStore.currentGame.coinCount}`)
+    
+          } else if (spinStore.currentGame.win === false) {
+            setCurrentResult(`Попробуй еще раз`)
+            console.log(spinStore.currentGame)
+          }
       }
 
-      if (spinStore.currentGame.win) {
-        console.log(spinStore.currentGame.win)
-        setCurrentResult(`Вы получили ${spinStore.currentGame.coinCount}`)
-        // if (spinStore.currentGame.jackpod) {
-        //   console.log("джекпод")
-        // } else {
-        //   setCurrentResult(<img src="https://media.tenor.com/hDW3Dk9CyHQAAAAi/app-award.gif" />)
-        // }
-        
-        // clientStore.updateUserBalance(1, spinStore.currentGame.coinCount)
-
-      } else if (spinStore.currentGame.win === false) {
-        setCurrentResult(`Попробуй еще раз`)
-        console.log(spinStore.currentGame)
-        // clientStore.updateUserBalance(2, spinStore.currentGame.betValue)
-        // clientStore.updateUserCandy(1, spinStore.currentGame.betValue)
-      }
+      
       stopVibrationOnStop();
       playFinalSound();
 

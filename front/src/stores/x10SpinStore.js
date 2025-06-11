@@ -1,33 +1,54 @@
 import { action, makeAutoObservable, set } from 'mobx';
 import OnePage from '../pages/introduction/onePage';
 import TwoPage from '../pages/introduction/twoPage';
-import { getBetsValuesReq, makeBetReq } from '../utils/requests/users';
+import { getBetsValuesReq, getRoomUserReq, makeBetReq } from '../utils/requests/users';
 import clientStore from './clientStore';
 import changeBetModalStore from './changeBetModalStore';
 
 class X10SpinStore {
-
-
+    rotation = 0
+    activeRoom = null
     x10 = false
     currentGame = {}
-
+    gameStart = false
+    targetSegment = null
     fixedPositions = [
-        { x: 310, y: 150 },
-        { x: 293.18, y: 186.60 },
-        { x: 272.79, y: 233.83 },
-        { x: 242.71, y: 272.79 },
-        { x: 200, y: 293.18 },
-        { x: 150, y: 300 },
-        { x: 97.29, y: 293.18 },
-        { x: 57.29, y: 272.79 },
-        { x: 27.29, y: 233.83 },
-        { x: 16.82, y: 186.60 }
+        { x: 290, y: 162 },
+        { x: 260, y: 230 },
+        { x: 200, y: 285 },
+        { x: 120, y: 285 },
+        { x: 55, y: 230 },
+        { x: 35, y: 162 },
+        { x: 55, y: 85 },
+        { x: 120, y: 35 },
+        { x: 200, y: 35 },
+        { x: 260, y: 85 },
       ];
     
+    // fixedPositions = [
+    //     { x: 290, y: 162 },
+    //     { x: 260, y: 230 },
+    //     { x: 200, y: 285 },
+    //     { x: 120, y: 285 },
+    //     { x: 55, y: 230 },
+    //     { x: 35, y: 162 },
+    //     { x: 55, y: 85 },
+    //     { x: 120, y: 35 },
+    //     { x: 200, y: 35 },
+    //     { x: 260, y: 85 },
+    // ];
 
     constructor() {
         makeAutoObservable(this);
     }
+
+    setRotation = action((newValue) => {
+        this.rotation = newValue
+    })
+
+    setGameStart = action((newValue) => {
+        this.gameStart = newValue
+    })
 
     getCoords = action(() => {
         let returnCoords = null
@@ -45,11 +66,28 @@ class X10SpinStore {
         return returnCoords
     })
 
+    setTargetSegment = action((newValue) => {
+        this.targetSegment = this.newValue
+    })
+
     setX10 = action(async (newValue) => {
         this.x10 = newValue
         console.log(this.x10)
     })
 
+    getRoomUser = action(async (setAvatars) => {
+        const response = await getRoomUserReq(clientStore.user.id)
+        switch(response.status) {
+            case 200: {
+                const data = await response.data;
+                this.activeRoom = data
+                console.log(data)
+                if (data) {
+                    setAvatars(data.players)
+                }
+            }
+        }
+    })
 
     
 

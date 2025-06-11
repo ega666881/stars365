@@ -18,60 +18,100 @@ function X10Spin() {
   const segmentAngle = 360 / segmentCount;
   const wheelSize = 320;
   const radius = wheelSize / 2;
-
+  const [rerenderKey, setRerenderKey] = useState(0);
   const [rotation, setRotation] = useState(0);
   const rotationRef = useRef(0);
   const [isSpinning, setIsSpinning] = useState(false);
   const [currentResult, setCurrentResult] = useState(null);
   const [arrowShake, setArrowShake] = useState(false);
   const [avatars, setAvatars] = useState([]); // Храним аватарки
-  const [winnerIndex, setWinnerIndex] = useState(null);
-
+  const [winnerIndex, setWinnerIndex] = useState(1);
+  const touchStartX = useRef(null);
+  const touchEndX = useRef(null);
   const wheelRef = useRef(null);
 
-  const fixedPositions = [
-    { x: 290, y: 162 },
-    { x: 260, y: 230 },
-    { x: 200, y: 285 },
-    { x: 120, y: 285 },
-    { x: 55, y: 230 },
-    { x: 35, y: 162 },
-    { x: 55, y: 85 },
-    { x: 120, y: 35 },
-    { x: 200, y: 35 },
-    { x: 260, y: 85 },
-  ];
+  const forceRerender = () => setRerenderKey((prev) => prev + 1);
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
 
+  // Функция для обработки движения пальца
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const formatBet = () => {
+    let bet = changeBetModalStore.bet.value
+    if (x10SpinStore.activeRoom) {
+      if (Object.keys(x10SpinStore?.activeRoom).length > 2) {
+        bet = x10SpinStore.activeRoom.betValue
+      } 
+    }
+    
+    return <>
+      {Number(bet) >= 999 ? (
+        <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+          {Array.from(String(bet))[0]}K
+          <img src={mediaManager('starsMiniIcon')} />
+        </Box>
+      ):(
+        <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+          {bet}
+          <img src={mediaManager('starsMiniIcon')} />
+        </Box>
+      )}
+    </>
+  }
+
+  // Функция для обработки окончания касания
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    if (isSpinning) return
+    console.log(x10SpinStore.activeRoom)
+    if (Object.keys(x10SpinStore.activeRoom).length < 2) {
+      socketStore.sendJoinRoom({
+        userId: clientStore.user.id,
+        avatar: clientStore.user.photo_url,
+        betValue: changeBetModalStore.bet.value
+      })
+      startSpin()
+      x10SpinStore.getRoomUser(setAvatars)
+      clientStore.getUser(clientStore.user.telegram_id)
+    }
+
+    // Сброс значений
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
   useEffect(() => {
     rotationRef.current = rotation;
   }, [rotation]);
 
   useEffect(() => {
-    setRotation(spinStore.targetSegment * 35.8)
+    if(x10SpinStore.targetSegment) {
+      setRotation(x10SpinStore.targetSegment * 35.8)
+      console.log("sd4444")
+    }
   }, [isSpinning])
 
-  // Подключиться к комнате при монтировании
   useEffect(() => {
-    console.log("gggg")
-    socketStore.socket.emit("join-x10-room", {
-      userId: clientStore.user.id,
-      avatar: clientStore.user.photo_url
-    });
-
+    x10SpinStore.setGameStart(false)
+    x10SpinStore.getRoomUser(setAvatars)
     socketStore.socket.on("room-update", (users) => {
-      console.log(avatars)
       setAvatars(users);
     });
-
     const onGameStarted = ({ winnerUserId }) => {
       console.log("Игра началась, победитель:", winnerUserId);
-      
-      // Находим индекс победителя среди avatars
-      const winnerIndex = avatars.findIndex((avatar) => avatar.user_id === winnerUserId);
-      console.log(winnerUserId)
+
+      const winnerIndex = x10SpinStore.activeRoom?.players?.findIndex((avatar) => avatar.user_id === winnerUserId);
+      console.log(winnerIndex)
       if (winnerIndex !== -1) {
-        spinStore.setTargetSegment(winnerIndex); // Устанавливаем целевой сегмент
-        startSpin(); // Запускаем вращение
+        x10SpinStore.setTargetSegment(winnerIndex); // Устанавливаем целевой сегмент
+        x10SpinStore.setGameStart(true)
+        startSpin(true, ((360 * 5) + (35.6 * (winnerIndex + 3) * -1)));
+        // setTimeout(() => {
+        //   setRotation((winnerIndex) * 35.6 * 1)
+        // }, 2000)
       }
     };
 
@@ -83,23 +123,36 @@ function X10Spin() {
     };
   }, []);
 
-  const startSpin = (targetIndex) => {
+  const startSpin = (win = false, rotation) => {
     console.log(isSpinning)
     if (isSpinning) return;
-    setIsSpinning(true);
 
     const rotations = 5;
-    const targetRotation = rotationRef.current + rotations * 360 + (segmentCount - spinStore.targetSegment) * segmentAngle;
+    const targetRotation = rotationRef.current + rotations * 360 + (segmentCount - 1) * segmentAngle;
     const correctedRotation = targetRotation + segmentAngle / 2;
 
-    setRotation(correctedRotation);
+    if (win) {
+      console.log(rotation)
+      setRotation(rotation)
+
+    } else {
+      setRotation(200);
+    }
+    setIsSpinning(true);
+    console.log("123123")
   };
 
   const handleAnimationComplete = () => {
     if (isSpinning && winnerIndex !== null) {
-      setCurrentResult(`Победитель: ${winnerIndex}`);
+      //setCurrentResult(`Победитель: ${winnerIndex}`);
       playFinalSound();
       setIsSpinning(false);
+      if (!x10SpinStore.gameStart) {
+        setRotation(0)
+        forceRerender()
+      } else {
+        clientStore.getUser(clientStore.user.telegram_id)
+      }
     }
   };
 
@@ -112,7 +165,8 @@ function X10Spin() {
 
   const renderSegmentImages = () => {
     return avatars.map((avatar, index) => {
-      const pos = fixedPositions[index];
+      if (index > 9) return
+      const pos = x10SpinStore.fixedPositions[index];
       return (
         <Box
           key={index}
@@ -150,6 +204,7 @@ function X10Spin() {
     >
       {/* Колесо */}
       <Box
+        key={rerenderKey}
         ref={wheelRef}
         component={motion.div}
         className="spinBackground"
@@ -168,13 +223,16 @@ function X10Spin() {
           transform: "translateZ(0) scale3d(1, 1, 1)",
           cursor: isSpinning ? "default" : "grab"
         }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         <img
           src={mediaManager("x10SpinBackgroundImage")}
           alt="Spin Background"
           style={{ width: "100%", height: "100%", transform: "translate(-0%, -0%)" }}
         />
-        {renderSegmentImages()}
+        {avatars && renderSegmentImages()}
       </Box>
 
       <Box
@@ -213,6 +271,7 @@ function X10Spin() {
           transform: "translate(-0%, -0%)",
           zIndex: 2
         }}
+        onClick={() => changeBetModalStore.setOpenModal(true)}
       >
         <img
           src={mediaManager("elipceCenterSpinImage")}
@@ -249,18 +308,9 @@ function X10Spin() {
             backgroundClip: "text",
             color: "transparent",
           }}
+          onClick={() => changeBetModalStore.setOpenModal(true)}
         >
-          {changeBetModalStore.bet.value === "candy" ? (<img src={mediaManager('candyWhiteIcon')} width={"40"}/>):(
-            <>
-            {Number(changeBetModalStore.bet.value) >= 999 ? (<Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-              {Array.from(String(changeBetModalStore.bet.value))[0]}K
-              <img src={mediaManager('starsMiniIcon')} />
-            </Box>):(<Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-              {changeBetModalStore.bet.value}
-              <img src={mediaManager('starsMiniIcon')} />
-            </Box>)}
-            </>
-          )}
+            {formatBet()}
         </Typography>
       </Box>
 

@@ -3,10 +3,10 @@ import { Server, Socket } from 'socket.io';
 import { IUserLogin } from './socket.interface';
 import { KNEX_INSTANCE, tableNames } from '../database/database.constants';
 import { Knex } from 'knex';
-import { Inject } from '@nestjs/common';
+import { Global, Inject } from '@nestjs/common';
 import { IUser } from 'src/users/users.interface';
 
-
+@Global()
 @WebSocketGateway({ cors: true })
 export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
@@ -37,29 +37,37 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
     @SubscribeMessage('join-x10-room')
     async handleJoin(client, payload) {
-    const { userId, avatar } = payload;
-    let room = await this.findOrCreateRoom();
-    
-    await this.joinRoom(room.id, userId, avatar);
-    const users = await this.getRoomUsers(room.id);
+      const { userId, avatar, betValue } = payload;
+      const user = await this.knex(tableNames.users).select('*').where({id: userId}).first()
+      if (user.balance < betValue) {
+        return
+      }
+      console.log('join')
+      let room = await this.findOrCreateRoom(betValue);
+      const roomUser = await this.knex(tableNames.room_users).select("*").where({user_id: userId}).first()
+      if (!roomUser) {
+        await this.joinRoom(room.id, userId, avatar);
+        await this.knex(tableNames.users).update({balance: this.knex.raw(`balance - ${betValue}`)}).where({id: userId})
+      }
+      const users = await this.getRoomUsers(room.id);
+      
+      // Обновляем всех участников
+      this.server.to(room.id.toString()).emit('room-update', users);
 
-    // Обновляем всех участников
-    this.server.to(room.id.toString()).emit('room-update', users);
+      if (users.length === 2) {
+          setTimeout(async () => {
+            const winnerUserId = await this.startGame(room.id);
+            console.log(winnerUserId)
+            this.server.to(room.id.toString()).emit('game-started', { winnerUserId });
+            setTimeout(async () => {
+              await this.deleteRoom(room.id)
+              await this.knex(tableNames.users).update({balance: this.knex.raw(`balance + ${room.betValue}`)}).where({id: winnerUserId})
+            }, 10000)
+          }, 8000)
+      }
 
-    if (users.length === 10) {
-        const winnerUserId = await this.startGame(room.id);
-        console.log(winnerUserId)
-        this.server.to(room.id.toString()).emit('game-started', { winnerUserId });
-
-        // Опционально: удаляем комнату через N секунд
-        setTimeout(async () => {
-        await this.deleteRoom(room.id);
-        this.server.to(room.id.toString()).emit('room-closed');
-        this.server.socketsLeave(room.id.toString());
-        }, 30000); // например, через 30 секунд
-    }
-
-    client.join(room.id.toString());
+      client.join(room.id.toString());
+      console.log(client.id, "событие")
     }
 
     async deleteRoom(roomId: number): Promise<void> {
@@ -76,17 +84,18 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         this.server.emit('active-users-count', {total: activeUsers.total, clientId: client.id, settings: settings, winsHistory: winsHistory})
     }
 
-    async findOrCreateRoom(): Promise<any> {
+    async findOrCreateRoom(betValue): Promise<any> {
         const activeRooms = await this.knex('rooms')
           .where('is_active', true)
-          .andWhereRaw('(SELECT COUNT(*) FROM room_users WHERE room_users.room_id = rooms.id) < 10');
+          .andWhereRaw('(SELECT COUNT(*) FROM room_users WHERE room_users.room_id = rooms.id) < 10')
+          .andWhere({betValue: betValue})
     
         if (activeRooms.length > 0) {
           return activeRooms[0];
         }
     
         // Создаем новую комнату
-        const [newRoom] = await this.knex('rooms').insert({ is_active: true }).returning('*');
+        const [newRoom] = await this.knex('rooms').insert({ is_active: true, betValue: betValue }).returning('*');
         return newRoom;
       }
     
@@ -100,7 +109,7 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     
       async startGame(roomId: number): Promise<number | null> {
         const users = await this.getRoomUsers(roomId);
-        if (users.length < 10) return null;
+        if (users.length < 2) return null;
     
         const winnerIndex = Math.floor(Math.random() * users.length);
         return users[winnerIndex].user_id;

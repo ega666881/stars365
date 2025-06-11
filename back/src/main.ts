@@ -4,11 +4,13 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { LocalhostOnlyMiddleware } from './middleware/ip-whitelist.middleware';
 
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
   app.enableCors()
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }))
+  
   const config = new DocumentBuilder()
     .setTitle('Stars365 API')
     .setDescription('API documentation for Telegram authentication')

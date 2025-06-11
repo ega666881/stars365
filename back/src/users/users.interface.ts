@@ -68,3 +68,10 @@ export interface ISettings {
     spinCountJackpod?: number | any
     spinCountPresent?: number | any
 }
+
+export interface IRoom {
+    id?: number
+    created_at?: Date
+    is_active?: boolean
+    betValue?: number
+}

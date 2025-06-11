@@ -5,6 +5,8 @@ import mediaManager from '../../utils/mediaManager';
 import clientStore from '../../stores/clientStore';
 import { observer } from 'mobx-react';
 import CountdownTimer from '../profilePage/weekRewardComponents/weekRewardTimer'
+import BalanceAnimation from './balanceAnimation/balanceAnimation';
+
 
 function Header() {
     const navigate = useNavigate()
@@ -75,7 +77,8 @@ function Header() {
                 }}
                 
             >
-                <Typography
+                <BalanceAnimation typeBalance={Number(clientStore.user.balance)} image={"starsOutlinedImage"} elementId={"balanceMain"}/>
+                {/* <Typography
                     sx={{
                         fontFamily: "Roboto",
                         fontSize: "20px",
@@ -87,8 +90,8 @@ function Header() {
                     >
                         {clientStore.user.balance}
                         <img src={mediaManager('starsOutlinedImage')} />
-                </Typography>
-                <Typography 
+                </Typography> */}
+                {/* <Typography 
                     sx={{
                         fontFamily: "Roboto",
                         fontSize: "20px",
@@ -99,7 +102,8 @@ function Header() {
                 >
                     {clientStore.user.candy}
                     <img src={mediaManager('candyWhiteIcon')} />
-                </Typography>
+                </Typography> */}
+                <BalanceAnimation typeBalance={Number(clientStore.user.candy)} image={"candyWhiteIcon"} elementId={"candyMain"}/>
             </Box>
             <Avatar 
                 alt="User"

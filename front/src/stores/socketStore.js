@@ -54,6 +54,10 @@ class SocketStore {
       }
   }
 
+  sendJoinRoom(data) {
+    this.socket.emit("join-x10-room", data)
+  }
+
   sendUserLogout(data) {
     if (this.socket) {
         this.socket.emit('userLogout', data);

@@ -53,6 +53,28 @@ export class UsersRepository {
         return updatedUser[0]
     }
 
+    async getRoomUser(userId: number) {
+        const userRoom = await this.knex(tableNames.room_users)
+            .select('room_id')
+            .where({ user_id: userId })
+            .first();
+
+        if (!userRoom || !userRoom.room_id) {
+            return { room: null }; // или throw new Error(...)
+        }
+        const room = await this.knex(tableNames.rooms)
+                .leftJoin(tableNames.room_users, `${tableNames.rooms}.id`, `${tableNames.room_users}.room_id`)
+                .select([
+                `${tableNames.rooms}.*`,
+                this.knex.raw(`JSON_AGG(${tableNames.room_users}.*) FILTER (WHERE ${tableNames.room_users}.id IS NOT NULL) AS players`)
+                ])
+                .where({ [`${tableNames.rooms}.id`]: userRoom.room_id })
+                .groupBy(`${tableNames.rooms}.id`)
+                .first();
+
+        return room
+    }
+
     async addWinHistory(insertData: IWinsHistory) {
         await this.knex(tableNames.winsHistory).insert(insertData)
         return true

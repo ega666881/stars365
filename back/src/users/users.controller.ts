@@ -1,7 +1,7 @@
 import { Controller, Post, Body, UseGuards, Get, Query, Param, Put } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiTags } from '@nestjs/swagger';
-import { BetDto, BuySubscriptionDto, CheckTaskDto, CreateInvoiceDto, CreateUserDto, GetUsersQuery, TakeReferalRewardDto, UpdateUserAvatarDto, WinUserStarsDto } from './users.dto';
+import { BetCandyDto, BetDto, BuySubscriptionDto, CheckTaskDto, CreateInvoiceDto, CreateUserDto, GetUsersQuery, TakeReferalRewardDto, UpdateUserAvatarDto, WinUserStarsDto } from './users.dto';
 import { TelegramAuthGuard } from 'src/middleware/telegram.middleware';
 
 
@@ -47,6 +47,20 @@ export class UsersController {
     //@UseGuards(TelegramAuthGuard)
     async getTaskUser(@Param('id') userId: number) {
         return this.userService.getTasksUsers(userId)
+    }
+
+    @ApiTags('users')
+    @Get('get-room-user/:id')
+    //@UseGuards(TelegramAuthGuard)
+    async getRoomUser(@Param('id') userId: number) {
+        return this.userService.getRoomUser(userId)
+    }
+
+    @ApiTags('users')
+    @Post('bet-candy')
+    //@UseGuards(TelegramAuthGuard)
+    async betCandy(@Body() dto: BetCandyDto) {
+        return this.userService.betCandy(dto)
     }
 
     @ApiTags('users')

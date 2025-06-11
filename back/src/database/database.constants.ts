@@ -7,4 +7,6 @@ export const tableNames = {
     tasks: "tasks",
     tasksUsers: "tasksUsers",
     winsHistory: "winsHistory",
+    rooms: "rooms",
+    room_users: "room_users",
 }

@@ -3,7 +3,7 @@ import { KNEX_INSTANCE, tableNames } from '../database/database.constants';
 import { Inject } from '@nestjs/common';
 import { Knex } from 'knex';
 import { UsersRepository } from './users.repository';
-import { BetDto, BuySubscriptionDto, CheckTaskDto, CreateInvoiceDto, CreateUserDto, GetUsersQuery, TakeReferalRewardDto, UpdateUserAvatarDto, WinUserStarsDto } from './users.dto';
+import { BetCandyDto, BetDto, BuySubscriptionDto, CheckTaskDto, CreateInvoiceDto, CreateUserDto, GetUsersQuery, TakeReferalRewardDto, UpdateUserAvatarDto, WinUserStarsDto } from './users.dto';
 import * as dotenv from 'dotenv-ts';
 import { IBetPull, IFullUser, ITask, ITaskUser, IUser } from './users.interface';
 import axios from 'axios'
@@ -18,6 +18,31 @@ export class UsersService {
             private readonly usersRepository: UsersRepository,
             private readonly socketGateway: SocketGateway
         ) {}
+
+    private async getWinCountReward(reward: string, betValue: number, jackpod?: number) {
+        let winCount = 0
+        switch (reward) {
+            case "x10": {
+                winCount = betValue * 10
+                break
+            }
+
+            case "x3": {
+                winCount = betValue * 3
+                break
+            }
+            
+            case "x1": {
+                winCount = 0
+                break
+            }
+            case "jackpod": {
+                winCount = jackpod
+                break
+            }
+        }
+        return winCount
+    }
 
     async getUsers(dto: GetUsersQuery) {
         return this.usersRepository.getUsers(dto.subscripted, dto.userId, dto.tgId)
@@ -50,7 +75,9 @@ export class UsersService {
 
     }
 
-    
+    async getRoomUser(userId: number) {
+        return this.usersRepository.getRoomUser(userId)
+    }
 
     async getTasksUsers(userId: number) {
         const tasks = await this.usersRepository.getTasks()
@@ -93,6 +120,37 @@ export class UsersService {
         return {link: data.link}
     }
     
+    async betCandy(dto: BetCandyDto) {
+        const betCandyValue = 100
+        let user = await this.usersRepository.getUsers(undefined, dto.userId) as IFullUser
+        const win = Math.floor(Math.random() * 2)
+        const rewards = [
+            'x10',
+            'x3',
+            'x1'
+        ]
+        if (win >= 1) {
+            const reward = rewards[Math.floor(Math.random() * rewards.length)]
+            const winCount = await this.getWinCountReward(reward, betCandyValue)
+            await this.usersRepository.updateUser({
+                    candy: this.knex.raw(`candy + ${winCount}`)
+                }, 
+                dto.userId
+            )
+            user = await this.usersRepository.getUsers(undefined, user.id) as IFullUser
+            return {win: true, winCount: winCount, reward: reward, user: user}
+
+        } else {
+            await this.usersRepository.updateUser({
+                    candy: this.knex.raw(`candy + ${betCandyValue}`)
+                }, 
+                dto.userId
+            )
+            user = await this.usersRepository.getUsers(undefined, user.id) as IFullUser
+            return {win: false, winCount: betCandyValue, user: user}
+        }
+    }
+
     async makeBet(dto: BetDto) {
         const betPull = await this.usersRepository.getBetsPulls(dto.betId) as IBetPull
         let user = await this.usersRepository.getUsers(undefined, dto.userId) as IFullUser
@@ -117,27 +175,7 @@ export class UsersService {
 
             if (winRewards.length > 0) {
                 const reward = winRewards[Math.floor(Math.random() * winRewards.length)]
-                let winCount = 0
-                switch (reward) {
-                    case "x10": {
-                        winCount = betPull.betValue * 10
-                        break
-                    }
-
-                    case "x3": {
-                        winCount = betPull.betValue * 3
-                        break
-                    }
-                    
-                    case "x1": {
-                        winCount = 0
-                        break
-                    }
-                    case "jackpod": {
-                        winCount = settings.jackpod
-                        break
-                    }
-                }
+                let winCount = await this.getWinCountReward(reward, betPull.betValue, settings.jackpod)
                 const updatedData = {}
                 if (reward === 'x1') {
                     updatedData[reward] = this.knex.raw(`${reward} - ${betPull.betValue}`)
@@ -149,7 +187,6 @@ export class UsersService {
                     await this.usersRepository.updateSettings({jackpod: 0, spinCountJackpod: 0})
 
                 } else {
-                    console.log("Sfsdf")
                     await this.usersRepository.betValueUpdate(updatedData, betPull.id)
                 }
                 
@@ -159,7 +196,8 @@ export class UsersService {
 
                 }
                 //@ts-ignore
-                user = await this.usersRepository.updateUser({balance: this.knex.raw(`balance + ${winCount}`)}, dto.userId)
+                await this.usersRepository.updateUser({balance: this.knex.raw(`balance + ${winCount}`)}, dto.userId)
+                user = await this.usersRepository.getUsers(undefined, user.id) as IFullUser
                 const now = new Date();
                 const hours = String(now.getHours()).padStart(2, '0');    
                 const minutes = String(now.getMinutes()).padStart(2, '0'); 
@@ -182,11 +220,11 @@ export class UsersService {
                 return {win: true, winCount: winCount, reward: reward, user: user}
 
             } else {
-                //@ts-ignore
-                user = await this.usersRepository.updateUser({
+                await this.usersRepository.updateUser({
                     balance: this.knex.raw(`balance - ${betPull.betValue}`),
                     candy: this.knex.raw(`candy + ${betPull.betValue}`)
                 }, dto.userId) as IUser
+                user = await this.usersRepository.getUsers(undefined, user.id) as IFullUser
                 const x10Pull = betPull.betValue / 2
                 const x3Pull = (betPull.betValue * 20) / 100
                 const x1Pull = (betPull.betValue * 10) / 100
@@ -197,6 +235,7 @@ export class UsersService {
                         x1: this.knex.raw(`x1 + ${x1Pull}`),
                     }, betPull.id
                 )
+
                 await this.usersRepository.updateSettings({
                     jackpod: this.knex.raw(`jackpod + ${jackpodPull}`), 
                     spinCountJackpod: this.knex.raw(`"spinCountJackpod" + 1`)

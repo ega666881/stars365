@@ -1,7 +1,7 @@
 import { action, makeAutoObservable, set } from 'mobx';
 import OnePage from '../pages/introduction/onePage';
 import TwoPage from '../pages/introduction/twoPage';
-import { getBetsValuesReq, makeBetReq } from '../utils/requests/users';
+import { betCandyReq, getBetsValuesReq, makeBetReq } from '../utils/requests/users';
 import clientStore from './clientStore';
 import changeBetModalStore from './changeBetModalStore';
 
@@ -42,6 +42,43 @@ class SpinStore {
 
     resetCurrentGame = action(async () => {
         this.currentGame = {}
+    })
+
+    makeBetCandy = action(async () => {
+        const response = await betCandyReq(clientStore.user.id)
+        switch(response.status) {
+            case 201: {
+                const data = await response.data;
+                console.log(data)
+                if (data.win) {
+                    this.targetSegment = this.winSegments[data.reward]
+                    
+                    this.currentGame = {
+                        betValue: changeBetModalStore.bet.value,
+                        coinCount: data.winCount,
+                        win: true,
+                        jackpod: data.reward === 'jackpod',
+                        user: data.user
+                    }
+
+                } else {
+                    this.targetSegment = this.looseSegments[Math.floor(Math.random() * this.looseSegments.length)]
+                    this.win = true
+                    
+                    this.currentGame = {
+                        betValue: changeBetModalStore.bet.value,
+                        coinCount: data.winCount,
+                        win: false,
+                        jackpod: data.reward === 'jackpod',
+                        user: data.user
+                    }
+                }
+                break
+            }
+            default: {
+                
+            }
+        }
     })
 
     makeBet = action(async () => {
