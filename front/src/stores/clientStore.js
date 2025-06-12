@@ -12,12 +12,16 @@ class ClientStore {
     tasks = []
     winUserBar = null
     winsUsersHistoryOpen = false
-
+    walletConnected = false
     winsUsers = []
 
     constructor() {
         makeAutoObservable(this);
     }
+
+    setWalletConnected = action(newValue => { 
+        this.walletConnected = newValue
+    })
 
     setWinsUsersHistoryOpen = action((newValue) => {
         this.winsUsersHistoryOpen = newValue
@@ -71,10 +75,10 @@ class ClientStore {
     getSettings = action(async () => {
         const response = await getSettingsReq()
         switch(response.status) {
-        case 200: {
-            const data = await response.data;
-            this.settings = data
-        }
+            case 200: {
+                const data = await response.data;
+                this.settings = data
+            }
         }
     })
 

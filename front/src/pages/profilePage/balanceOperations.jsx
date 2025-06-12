@@ -9,21 +9,9 @@ import createTransactionModalStore from '../../stores/createTransactionModalStor
 import { useTonConnectUI } from '@tonconnect/ui-react';
 
 function BalanceOperations() {
-    const [connected, setConnected] = useState(false)
     const [tonConnectUI, setOptions] = useTonConnectUI()
     const navigate = useNavigate()
-    
-    useEffect(() => {
-        const unsubscribe = tonConnectUI.onStatusChange(wallet => {
-          setConnected(!!wallet);
-          console.log(wallet)
-          
-        });
-    
-        return () => {
-          unsubscribe();
-        };
-      }, []);
+
     return (
         <Box
             sx={{
@@ -46,7 +34,7 @@ function BalanceOperations() {
                     borderRadius: 27
                 }}
                 onClick={() => createTransactionModalStore.setOpenModal(true)}
-                disabled={!connected}
+                disabled={!clientStore.walletConnected}
             >
                 Пополнить +
             </Button>
@@ -59,7 +47,7 @@ function BalanceOperations() {
                     borderColor: '#878787',
                     borderRadius: 27
                 }}
-                disabled={!connected}
+                disabled={!clientStore.walletConnected}
             >
                 Вывести
             </Button>

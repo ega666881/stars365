@@ -15,7 +15,7 @@ function ToolBar() {
     
     useEffect(() => {
         const unsubscribe = tonConnectUI.onStatusChange(wallet => {
-          setConnected(!!wallet);
+          clientStore.setWalletConnected(!!wallet);
           if (wallet) {
             clientStore.addWallet(tonConnectUI.wallet.account.address)
 
@@ -31,7 +31,7 @@ function ToolBar() {
 
     useEffect(() => {
         if (tonConnectUI.wallet) {
-            setConnected(true)
+            clientStore.setWalletConnected(true)
         }
         
     }, [])
@@ -55,7 +55,7 @@ function ToolBar() {
                 }}
             >
                 
-                {connected ? (
+                {clientStore.walletConnected ? (
                     <Button
                         onClick={() => walletInfoModalStore.setOpenModal(true)}
                     >
