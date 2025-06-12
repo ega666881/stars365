@@ -100,7 +100,7 @@ const WalletInfoModal = () => {
                                 borderRadius: 27,
                                 backgroundColor: 'black',
                                 padding: 3,
-                                width: "90%",
+                                width: "80%",
                                 gap: 10
                             }}
                         >
