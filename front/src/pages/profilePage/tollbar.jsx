@@ -1,46 +1,37 @@
 import { Box, Typography, Avatar, Button } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import mediaManager from '../../utils/mediaManager';
 import { useTonConnectUI } from '@tonconnect/ui-react'
 import { observer } from 'mobx-react';
 import clientStore from '../../stores/clientStore';
 import createTransactionModalStore from '../../stores/createTransactionModalStore';
+import walletInfoModalStore from '../../stores/walletInfoModalStore';
 
 function ToolBar() {
     const [tonConnectUI, setOptions] = useTonConnectUI()
+    const [connected, setConnected] = useState(false)
     const navigate = useNavigate()
+    
+    useEffect(() => {
+        const unsubscribe = tonConnectUI.onStatusChange(wallet => {
+          setConnected(!!wallet);
+          if (wallet) {
+            clientStore.addWallet(tonConnectUI.wallet.account.address)
 
-    const sendTrans = async () => {
-        const data = await clientStore.createTransaction()
-
-        const transaction = {
-            validUntil: Math.floor(new Date() / 1000) + 360,
-            messages: [
-              {
-                address: "UQAcZnseCeTDeJjeUap0Kl2HCkDX4AhChociGvUKvHnUbY7t",
-                amount: `${subscribeCost.toFixed(2) * 1000000000}`,
-                payload: data.payload,
-              },
-              
-            ],
-            
-          };
-        
-        if (clientStore.user.referalWallet) {
-            transaction.messages.push(
-                {
-                    address: clientStore.user.referalWallet,
-                    amount: `${referalMoney * 1000000000}`,
-                },
-            )
-        }
-        tonConnectUI.sendTransaction(transaction)
-    }
+          } else {
+            clientStore.addWallet("")
+          }
+        });
+    
+        return () => {
+          unsubscribe();
+        };
+      }, []);
 
     useEffect(() => {
         if (tonConnectUI.wallet) {
-            clientStore.addWallet(tonConnectUI.wallet.account.address)
+            setConnected(true)
         }
         
     }, [])
@@ -64,14 +55,16 @@ function ToolBar() {
                 }}
             >
                 
-                {tonConnectUI.wallet ? (
+                {connected ? (
                     <Button
-                        
+                        onClick={() => walletInfoModalStore.setOpenModal(true)}
                     >
                         <img src={mediaManager('walletIcon')} width={30}/>
                         <Typography
                             sx={{
-                                fontSize: 13
+                                fontSize: 13,
+                                color: 'white',
+                                marginLeft: 1
                             }}
                         >
                         {tonConnectUI.wallet.account.address.substring(0, 5)}...{tonConnectUI.wallet.account.address.substring(tonConnectUI.wallet.account.address.length - 5)}

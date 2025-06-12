@@ -45,7 +45,7 @@ function Footer() {
                     
                     backgroundColor: 'black'
                 }}
-                onClick={() => navigate('/top-users')}
+                onClick={() => navigate('/top-page')}
             >
                 <img src={mediaManager('topIcon')} />
             </Button>

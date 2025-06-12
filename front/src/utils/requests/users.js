@@ -111,6 +111,17 @@ export const createTransactionReq = async (userId, amount) => {
   
 };
 
+export const getTopUsersReq = async () => {
+  try {
+      const response = await axios.get("/users/get-top-users");
+      return response;
+
+  } catch (err) {
+      return err.response;
+  }
+  
+};
+
 export const betCandyReq = async(userId) => {
   try {
     const response = await axios.post('/users/bet-candy', {

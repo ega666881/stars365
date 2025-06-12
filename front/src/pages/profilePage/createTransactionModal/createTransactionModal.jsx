@@ -21,16 +21,21 @@ import InputAdornment from '@mui/material/InputAdornment';
 const CreateTransactionModal = () => {
     const [calculatedBalance, setCalculatedBalance] = useState(0)
     const [tonConnectUI, setOptions] = useTonConnectUI()
+    const [errorMessage, setErrorMessage] = useState("")
 
     const sendTrans = async () => {
-        console.log(calculatedBalance)
+        if (createTransactionModalStore.payValue < 0 || createTransactionModalStore.payValue < 0.1) {
+            setErrorMessage("Сумма пополнения должна быть не менее 0.1 ton")
+            return
+        }
+        
         const data = await createTransactionModalStore.createTransaction(calculatedBalance)
 
         const transaction = {
             validUntil: Math.floor(new Date() / 1000) + 360,
             messages: [
               {
-                address: "UQAcZnseCeTDeJjeUap0Kl2HCkDX4AhChociGvUKvHnUbY7t",
+                address: "UQBl768IBuK5gf7YCebyICrMGaE2X8kBAsYHfuVTe5B-2BaO",
                 amount: `${createTransactionModalStore.payValue * 1000000000}`,
                 payload: data.payload,
               },
@@ -199,6 +204,9 @@ const CreateTransactionModal = () => {
                 >
                     Пополнить
                 </Button>
+                <Typography>
+                    {errorMessage}
+                </Typography>
             </Box>
         </DialogContent>
         </Dialog>

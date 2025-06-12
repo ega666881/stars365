@@ -5,7 +5,7 @@ import mediaManager from '../utils/mediaManager';
 import { formatNumber } from '../utils/formatNumber';
 import clientStore from '../stores/clientStore';
 
-function WinUserCard({data}) {
+function WinUserCard({data, openHistory = true}) {
     return <Button
                 sx={{
                     backgroundColor: 'black', 
@@ -21,7 +21,7 @@ function WinUserCard({data}) {
                     height: 40,
                     color: 'white'
                 }}
-                onClick={() => clientStore.setWinsUsersHistoryOpen(true)}
+                onClick={() => {openHistory && clientStore.setWinsUsersHistoryOpen(true)}}
             >
                 <Avatar 
                     alt="User"
@@ -49,7 +49,12 @@ function WinUserCard({data}) {
                     alignItems={'center'}
                     width={"80%"}
                     >
-                        <img src={mediaManager('starsOutlinedImage')} />{formatNumber(data.value)}
+                        {data.valueIcon ? (
+                            <img src={mediaManager(data.valueIcon)} />
+                        ):(
+                            <img src={mediaManager('starsOutlinedImage')} />
+                        )}
+                        {formatNumber(data.value)}
                     </Typography>
                 <Typography variant="h6" 
                     sx={{
@@ -58,7 +63,7 @@ function WinUserCard({data}) {
                         color: '#878787',
                         width: "50%"
                     }}>
-                    {data.time}
+                    {data?.time}
                     <img src={mediaManager('x10Icon')} 
                         style={{
                             

@@ -7,6 +7,7 @@ import TasksList from './tasksComponents/tasksList';
 import WeekRewards from './weekRewardComponents/weekRewards';
 import CreateTransactionModal from './createTransactionModal/createTransactionModal';
 import BalanceOperations from './balanceOperations';
+import WalletInfoModal from './walletInfoModal/walletInfoModal';
 
 function ProfilePage() {
     
@@ -21,6 +22,7 @@ function ProfilePage() {
             }}
         >
             <CreateTransactionModal />
+            <WalletInfoModal />
             <Slide in={true} direction='left'>
                 <Box>
                     <ProfileHeader backLink={'/'} />

@@ -101,7 +101,7 @@ export class UsersRepository {
         const candyTopQuery = this.knex(tableNames.users)
             .select('*')
             .limit(20)
-            .orderBy('balance', 'desc')
+            .orderBy('candy', 'desc')
 
         const [balanceTop, candyTop] = await Promise.all([balanceTopQuery, candyTopQuery])
         
