@@ -23,7 +23,7 @@ function TopPage() {
         <Box
             sx={{
                 display: 'flex',
-                gap: 10
+                gap: 5
             }}
         >
             <img src={mediaManager('arrowLeftHeader')} onClick={() => navigate('/')}/>
