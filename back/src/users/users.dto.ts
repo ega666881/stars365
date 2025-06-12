@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional, Validate } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, Validate, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { EntityExistsByIdRule } from 'src/validators/entityExistsById';
 import { tableNames } from 'src/database/database.constants';
@@ -67,6 +67,29 @@ export class BetCandyDto {
     @IsNotEmpty()
     @Validate(EntityExistsByIdRule, [tableNames.users])
     readonly userId: number
+}
+
+export class AddWalletUserDto {
+    @IsNumber()
+    @ApiProperty()
+    @Validate(EntityExistsByIdRule, [tableNames.users])
+    @IsNotEmpty()
+    readonly userId: number
+    @IsString()
+    @ApiProperty()
+    @IsNotEmpty()
+    readonly wallet: string
+}
+
+export class CreateTransactionDto {
+    @IsNumber()
+    @ApiProperty()
+    @Validate(EntityExistsByIdRule, [tableNames.users])
+    @IsNotEmpty()
+    readonly userId: number
+    @ApiProperty()
+    @IsNotEmpty()
+    readonly amount: number
 }
 
 

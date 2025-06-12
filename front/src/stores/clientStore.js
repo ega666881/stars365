@@ -1,5 +1,5 @@
 import { action, makeAutoObservable, set } from 'mobx';
-import { checkTaskUserReq, createInvoiceReq, getEveryDayRewardReq, getSettingsReq, getTasksReq, getUsersReq, takeDayRewardReq, takeReferalRewardReq, updateUserAvatarReq } from '../utils/requests/users';
+import { addWalletReq, checkTaskUserReq, createInvoiceReq, getEveryDayRewardReq, getSettingsReq, getTasksReq, getUsersReq, takeDayRewardReq, takeReferalRewardReq, updateUserAvatarReq } from '../utils/requests/users';
 import changeBetModalStore from './changeBetModalStore';
 import socketStore from './socketStore';
 
@@ -106,6 +106,17 @@ class ClientStore {
                 const data = await response.data;
                 this.tasks = data
             }
+        }
+    })
+
+    addWallet = action(async (wallet) => {
+        const response = await addWalletReq(Number(this.user.id), wallet)
+        console.log(response.status)
+        switch(response.status) {
+            case 201: {
+                
+                
+            } 
         }
     })
 

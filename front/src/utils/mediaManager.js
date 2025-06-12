@@ -33,7 +33,8 @@ import infoIcon from '../assets/Group 283.svg'
 import friendsIconOutlined from '../assets/Group 284.svg'
 import starsMiniIcon from '../assets/Group 112.svg'
 import jackPodIcon from '../assets/Mask group.svg'
-
+import notWalletIcon from '../assets/walletNotIcon.svg'
+import tonIcon from '../assets/Group 308.svg'
 
 
 function mediaManager(assetName) {
@@ -72,6 +73,8 @@ function mediaManager(assetName) {
     friendsIconOutlined: friendsIconOutlined,
     starsMiniIcon: starsMiniIcon,
     jackPodIcon: jackPodIcon,
+    notWalletIcon: notWalletIcon,
+    tonIcon: tonIcon,
   };
 
   if (assetName in assets) {

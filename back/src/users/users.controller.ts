@@ -1,7 +1,7 @@
 import { Controller, Post, Body, UseGuards, Get, Query, Param, Put } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiTags } from '@nestjs/swagger';
-import { BetCandyDto, BetDto, BuySubscriptionDto, CheckTaskDto, CreateInvoiceDto, CreateUserDto, GetUsersQuery, TakeReferalRewardDto, UpdateUserAvatarDto, WinUserStarsDto } from './users.dto';
+import { AddWalletUserDto, BetCandyDto, BetDto, BuySubscriptionDto, CheckTaskDto, CreateInvoiceDto, CreateTransactionDto, CreateUserDto, GetUsersQuery, TakeReferalRewardDto, UpdateUserAvatarDto, WinUserStarsDto } from './users.dto';
 import { TelegramAuthGuard } from 'src/middleware/telegram.middleware';
 
 
@@ -61,6 +61,40 @@ export class UsersController {
     //@UseGuards(TelegramAuthGuard)
     async betCandy(@Body() dto: BetCandyDto) {
         return this.userService.betCandy(dto)
+    }
+
+    @ApiTags('users')
+    @Post('create-transaction')
+    async getPayload(@Body() dto: CreateTransactionDto) {
+        return this.userService.createPayloadTrans(dto)
+    }
+    
+    @ApiTags('users')
+    @Put('/add-wallet')
+    async addWallet(@Body() dto: AddWalletUserDto) {
+        return this.userService.addWalletUser(dto)
+    }
+
+    @ApiTags('users')
+    @Get('/get-top-users')
+    async getTopUsers() {
+        return this.userService.getTopUsers()
+    }
+
+    @ApiTags('users')
+    @Get('/get-all-currency')
+    async getAllRates() {
+        const [tonUsd, starsRub, usdRub] = await Promise.all([
+            this.userService.getTonToUsd(),
+            this.userService.getStarsToRub(),
+            this.userService.getUsdToRub(),
+        ]);
+
+        return {
+            ton_usd: tonUsd,
+            stars_rub: starsRub,
+            usd_rub: usdRub,
+        };
     }
 
     @ApiTags('users')

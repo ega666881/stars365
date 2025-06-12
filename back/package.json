@@ -29,7 +29,7 @@
     "@nestjs/serve-static": "^4.0.2",
     "@nestjs/swagger": "^7.1.8",
     "@nestjs/websockets": "^10.4.17",
-    "@ton/ton": "^15.1.0",
+    "@ton/ton": "^15.2.1",
     "@tonclient/core": "^1.30.0",
     "@tonclient/lib-node": "^1.30.0",
     "@tonclient/lib-web": "^1.30.0",

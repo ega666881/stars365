@@ -3,7 +3,7 @@ import { KNEX_INSTANCE, tableNames } from '../database/database.constants';
 import { Inject } from '@nestjs/common';
 import { Knex } from 'knex';
 import * as dotenv from 'dotenv-ts';
-import { IBetPull, ISettings, IUser, IWinsHistory } from './users.interface';
+import { IBetPull, ISettings, ITransaction, IUser, IWinsHistory } from './users.interface';
 dotenv.config();
 
 @Injectable()
@@ -90,6 +90,44 @@ export class UsersRepository {
         taskId && query.where({id: taskId}).first()
         return query
 
+    }
+
+    async getTopUsers(userId?: number) {
+        const balanceTopQuery = this.knex(tableNames.users)
+            .select('*')
+            .limit(20)
+            .orderBy('balance', 'desc')
+        
+        const candyTopQuery = this.knex(tableNames.users)
+            .select('*')
+            .limit(20)
+            .orderBy('balance', 'desc')
+
+        const [balanceTop, candyTop] = await Promise.all([balanceTopQuery, candyTopQuery])
+        
+        return {
+            balanceTop: balanceTop,
+            candyTop: candyTop
+        }
+    }
+
+    async getTransactions(userId: number) {
+        return this.knex(tableNames.transactions).select('*').where({userId: userId, active: true})
+    }
+
+    async createTransaction(userId: number, amount: number = 0.1): Promise<ITransaction> {
+        await this.knex(tableNames.transactions).delete().where({userId: userId})
+        const transaction = await this.knex(tableNames.transactions).insert({userId: userId, amount: amount}).returning('*')
+        return transaction[0]
+    }
+
+
+    async getTransactionById(id: number) {
+        return this.knex(tableNames.transactions).select('*').where({id: id, active: true}).first()
+    }
+
+    async setTransactionInactive(transactionId: number) {
+        return this.knex(tableNames.transactions).update({active: false}).where({id: transactionId})
     }
 
     async getBetsValue() {

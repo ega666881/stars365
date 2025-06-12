@@ -77,6 +77,40 @@ export const getEveryDayRewardReq = async() => {
   }
 };
 
+export const addWalletReq = async (userId, wallet) => {
+  try {
+      const response = await axios.put("/users/add-wallet", {userId: userId, wallet: wallet});
+      return response;
+
+  } catch (err) {
+      return err.response;
+  }
+  
+};
+
+export const getAllCurrencyReq = async () => {
+  try {
+      const response = await axios.get("/users/get-all-currency");
+      return response;
+
+  } catch (err) {
+      return err.response;
+  }
+  
+};
+
+export const createTransactionReq = async (userId, amount) => {
+  try {
+      console.log(amount)
+      const response = await axios.post("/users/create-transaction", {userId: userId, amount: amount});
+      return response;
+
+  } catch (err) {
+      return err.response;
+  }
+  
+};
+
 export const betCandyReq = async(userId) => {
   try {
     const response = await axios.post('/users/bet-candy', {

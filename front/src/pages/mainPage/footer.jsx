@@ -7,9 +7,10 @@ import x10SpinStore from '../../stores/x10SpinStore';
 import clientStore from '../../stores/clientStore';
 import { formatNumber } from '../../utils/formatNumber';
 import WinUserCard from '../../sharedComponents/winUserCard';
+import { useNavigate } from 'react-router-dom';
 
 function Footer() {
-
+    const navigate = useNavigate()
     return (
         <Box
             sx={{
@@ -44,6 +45,7 @@ function Footer() {
                     
                     backgroundColor: 'black'
                 }}
+                onClick={() => navigate('/top-users')}
             >
                 <img src={mediaManager('topIcon')} />
             </Button>

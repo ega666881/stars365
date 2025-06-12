@@ -5,6 +5,8 @@ import ProfileHeader from './profileHeader';
 import ToolBar from './tollbar';
 import TasksList from './tasksComponents/tasksList';
 import WeekRewards from './weekRewardComponents/weekRewards';
+import CreateTransactionModal from './createTransactionModal/createTransactionModal';
+import BalanceOperations from './balanceOperations';
 
 function ProfilePage() {
     
@@ -18,9 +20,15 @@ function ProfilePage() {
                 
             }}
         >
+            <CreateTransactionModal />
             <Slide in={true} direction='left'>
                 <Box>
                     <ProfileHeader backLink={'/'} />
+                </Box>
+            </Slide>
+            <Slide in={true} direction='up'>
+                <Box>
+                    <BalanceOperations />
                 </Box>
             </Slide>
             <Slide in={true} direction='up'>

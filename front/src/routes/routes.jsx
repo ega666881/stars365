@@ -4,6 +4,7 @@ import MainPage from '../pages/mainPage/mainPage';
 import ProfilePage from '../pages/profilePage/profilePage';
 import SettingsPage from '../pages/settingsPage/settingsPage';
 import ReferalPage from '../pages/referalPage/referalPage';
+import TopPage from '../pages/topPage/topPage';
 
 const RoutesComponent = (props) => {
     return <Routes>
@@ -22,6 +23,10 @@ const RoutesComponent = (props) => {
       <Route
         path='/referals'
         element={<ReferalPage />}
+      />
+      <Route
+        path='/top-page'
+        element={<TopPage />}
       />
     </Routes>
     

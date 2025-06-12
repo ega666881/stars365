@@ -1,10 +1,50 @@
-import React from 'react';
-import { Box, Typography, Avatar } from '@mui/material';
+import { Box, Typography, Avatar, Button } from '@mui/material';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import mediaManager from '../../utils/mediaManager';
+import { useTonConnectUI } from '@tonconnect/ui-react'
+import { observer } from 'mobx-react';
+import clientStore from '../../stores/clientStore';
+import createTransactionModalStore from '../../stores/createTransactionModalStore';
 
 function ToolBar() {
+    const [tonConnectUI, setOptions] = useTonConnectUI()
     const navigate = useNavigate()
+
+    const sendTrans = async () => {
+        const data = await clientStore.createTransaction()
+
+        const transaction = {
+            validUntil: Math.floor(new Date() / 1000) + 360,
+            messages: [
+              {
+                address: "UQAcZnseCeTDeJjeUap0Kl2HCkDX4AhChociGvUKvHnUbY7t",
+                amount: `${subscribeCost.toFixed(2) * 1000000000}`,
+                payload: data.payload,
+              },
+              
+            ],
+            
+          };
+        
+        if (clientStore.user.referalWallet) {
+            transaction.messages.push(
+                {
+                    address: clientStore.user.referalWallet,
+                    amount: `${referalMoney * 1000000000}`,
+                },
+            )
+        }
+        tonConnectUI.sendTransaction(transaction)
+    }
+
+    useEffect(() => {
+        if (tonConnectUI.wallet) {
+            clientStore.addWallet(tonConnectUI.wallet.account.address)
+        }
+        
+    }, [])
+
     return (
         <Box
             sx={{
@@ -23,14 +63,29 @@ function ToolBar() {
                     alignItems: 'center'
                 }}
             >
-                <img src={mediaManager('walletIcon')} width={30}/>
-                <Typography
-                    sx={{
-                        fontSize: 13
-                    }}
+                
+                {tonConnectUI.wallet ? (
+                    <Button
+                        
                     >
-                    адресс кошелька
-                </Typography>
+                        <img src={mediaManager('walletIcon')} width={30}/>
+                        <Typography
+                            sx={{
+                                fontSize: 13
+                            }}
+                        >
+                        {tonConnectUI.wallet.account.address.substring(0, 5)}...{tonConnectUI.wallet.account.address.substring(tonConnectUI.wallet.account.address.length - 5)}
+                        </Typography>
+                    </Button>
+                ):(
+                    <Button
+                        onClick={() => {
+                            tonConnectUI.openModal()
+                        }}
+                    >
+                        <img src={mediaManager('notWalletIcon')} width={30}/>
+                    </Button>
+                )}
             </Box>
             <Box
                 sx={{
@@ -80,4 +135,4 @@ function ToolBar() {
   );
 }
 
-export default ToolBar;
+export default observer(ToolBar);

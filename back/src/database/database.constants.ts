@@ -9,4 +9,5 @@ export const tableNames = {
     winsHistory: "winsHistory",
     rooms: "rooms",
     room_users: "room_users",
+    transactions: "transactions",
 }

@@ -19,6 +19,7 @@ export interface IUser {
     winStarsBalance?: number | any
     isActive?: boolean | any
     socketId?: number | any
+    wallet?: string
 }
 
 export interface IFullUser extends IUser {
@@ -74,4 +75,12 @@ export interface IRoom {
     created_at?: Date
     is_active?: boolean
     betValue?: number
+}
+
+export interface ITransaction {
+    id: number;
+    userId: number;
+    amount: number;
+    active: boolean;
+    wallet: string;
 }

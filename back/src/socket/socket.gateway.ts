@@ -79,7 +79,7 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     async handleUserLogout(@ConnectedSocket() client: Socket) {
         const activeUsers = await this.knex(tableNames.users).count("* as total").where({isActive: true}).first()
         const settings = await this.knex(tableNames.settings).select('*').first()
-        const winsHistory = await this.knex(tableNames.winsHistory).select('*').orderBy('id', 'asc');
+        const winsHistory = await this.knex(tableNames.winsHistory).select('*').orderBy('id', 'desc');
         //@ts-ignore
         this.server.emit('active-users-count', {total: activeUsers.total, clientId: client.id, settings: settings, winsHistory: winsHistory})
     }

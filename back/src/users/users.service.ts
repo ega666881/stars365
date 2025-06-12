@@ -3,16 +3,19 @@ import { KNEX_INSTANCE, tableNames } from '../database/database.constants';
 import { Inject } from '@nestjs/common';
 import { Knex } from 'knex';
 import { UsersRepository } from './users.repository';
-import { BetCandyDto, BetDto, BuySubscriptionDto, CheckTaskDto, CreateInvoiceDto, CreateUserDto, GetUsersQuery, TakeReferalRewardDto, UpdateUserAvatarDto, WinUserStarsDto } from './users.dto';
+import { BetCandyDto, BetDto, BuySubscriptionDto, CheckTaskDto, CreateInvoiceDto, CreateUserDto, GetUsersQuery, TakeReferalRewardDto, UpdateUserAvatarDto, WinUserStarsDto, CreateTransactionDto, AddWalletUserDto } from './users.dto';
 import * as dotenv from 'dotenv-ts';
-import { IBetPull, IFullUser, ITask, ITaskUser, IUser } from './users.interface';
+import { IBetPull, IFullUser, ITask, ITaskUser, ITransaction, IUser } from './users.interface';
 import axios from 'axios'
 import { SocketGateway } from 'src/socket/socket.gateway';
+import { beginCell } from '@ton/ton'
 dotenv.config();
 
 
 @Injectable()
 export class UsersService {
+    private readonly COINGECKO_API = 'https://api.coingecko.com/api/v3'; 
+    private readonly EXCHANGERATE_API = 'https://v6.exchangerate-api.com/v6/7c48ad6acbdbb714db67fe30/latest/USD'; 
     constructor(
             @Inject(KNEX_INSTANCE) private readonly knex: Knex,
             private readonly usersRepository: UsersRepository,
@@ -44,8 +47,92 @@ export class UsersService {
         return winCount
     }
 
+    async getTonToUsd(): Promise<number> {
+        const response = await axios.get('https://api.coingecko.com/api/v3/simple/price',  {
+        params: {
+            ids: 'the-open-network',
+            vs_currencies: 'usd'
+        }
+        });
+        const tonUsd = response.data['the-open-network'].usd;
+        return tonUsd
+      }
+    
+      async getStarsToRub(): Promise<number> {
+        const starsToUsd = 0.005;
+    
+
+        const usdToRub = await this.getUsdToRub();
+    
+        return starsToUsd * usdToRub;
+      }
+    
+      async getUsdToRub(): Promise<any> {
+        const res = await axios.get(this.EXCHANGERATE_API);
+        console.log(res.data.conversion_rates.RUB)
+        return res.data.conversion_rates.RUB;
+      }
+
+    async createPayloadTrans(dto: CreateTransactionDto): Promise<object> {
+        const transaction = await this.usersRepository.createTransaction(dto.userId, dto.amount)
+        const body = beginCell()
+          .storeUint(0, 32)
+          .storeStringTail(transaction.id.toString())
+          .endCell()
+    
+        return {"payload": body.toBoc().toString("base64")}
+    }
+
+    async addWalletUser(dto: AddWalletUserDto) { 
+        await this.usersRepository.updateUser({wallet: dto.wallet}, dto.userId)
+        return this.usersRepository.getUsers(undefined, dto.userId)
+    }
+
+    async getTopUsers() {
+        return this.usersRepository.getTopUsers()
+    }
+
     async getUsers(dto: GetUsersQuery) {
-        return this.usersRepository.getUsers(dto.subscripted, dto.userId, dto.tgId)
+        let user = await this.usersRepository.getUsers(dto.subscripted, dto.userId, dto.tgId) as IFullUser
+        //console.log(user)
+        const transactions = await this.usersRepository.getTransactions(user.id)
+        if (transactions.length > 0) {
+            console.log("sdfsf")
+            const response = await fetch(`https://toncenter.com/api/v2/getTransactions?address=${user.wallet}&limit=20&to_lt=0&archival=true`)
+            const tonTransactions = await response.json()
+            tonTransactions.result.map((transaction) => {
+                transaction.out_msgs.map( async (msg) => {
+                    try {
+                        const trx = await this.usersRepository.getTransactionById(Number(msg.message)) as ITransaction
+                        if (trx) {
+                            await this.usersRepository.setTransactionInactive(trx.id)
+                            await this.usersRepository.updateUser({
+                                balance: this.knex.raw(`balance + ${trx.amount}`)
+                            }, trx.userId)
+                            user = await this.usersRepository.getUsers(dto.subscripted, dto.userId) as IFullUser
+                            await this.knex(tableNames.transactions).delete().where({userId: user.id})
+                            //@ts-ignore
+                            //   const referal = await this.knex('referals').select('*').leftJoin('users', 'users.id', 'referals.userId').where({referalId: updatedUser.id}).first()
+                            //   if (referal) {
+                            //     if (referal.wallet.length > 0) {
+                            //       const addProfit = trx.amount * 40 / 100
+                            //       await this.usersRepository.updateReferalUser(referal.id, updatedUser.id, addProfit)
+                            //       updatedUser['referalWallet'] = referal.wallet
+                            //     }
+                            //   }
+                            return user
+                        }
+                    } catch (error) {
+                        //console.log(error)
+                        return user
+                    }
+                })
+            })
+            return user
+
+        } else {
+            return user
+        }
     }
 
     async checkTaskUser(dto: CheckTaskDto) {
