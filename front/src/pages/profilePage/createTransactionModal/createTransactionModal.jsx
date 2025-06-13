@@ -76,7 +76,7 @@ const CreateTransactionModal = () => {
                     borderRadius: '30px',
                     width: "110%",
                     marginTop: "100%",
-                    zIndex: 9999,
+                    
                     height: "50%"
                 },
             }}
