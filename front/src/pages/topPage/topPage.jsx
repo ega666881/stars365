@@ -17,7 +17,9 @@ function TopPage() {
     return <Box
         sx={{
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            overflowX: 'hidden',
+            width: "100%"
         }}
     >
         <Box
@@ -64,8 +66,9 @@ function TopPage() {
         </Box>
         <Box
             sx={{
-                maxHeight: "80%",
-                overflowY: 'auto'
+                maxHeight: "100vh",
+                overflowY: 'auto',
+                overflowX: 'hidden',
             }}
         >
             {topStore.tops && topStore.tops[topStore.selectedTop].map((user) => <WinUserCard data={{

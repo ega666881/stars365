@@ -6,15 +6,24 @@ import clientStore from './clientStore';
 import changeBetModalStore from './changeBetModalStore';
 
 class SpinStore {
+    // winSegments = {
+    //     x1: 10,
+    //     x10: 12,
+    //     x3: 4,
+    //     x2: 8
+    // }
+
     winSegments = {
-        x1: 10,
-        x10: 12,
-        x3: 4,
+        x1: 15,
+        x10: 5,
+        x3: 13,
         x2: 8
     }
 
     autoSpin = false
-    looseSegments = [9, 7, 5, 3, 1, 11]
+    // looseSegments = [9, 7, 5, 3, 1, 11]
+    //3, 5, 7, 9, 11
+    looseSegments = [3, 5, 7, 9, 11]
     isSpinning = false
     targetSegment = 0
     currentGame = {}

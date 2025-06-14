@@ -117,6 +117,7 @@ function SpinTest({ segments = [] }) {
 
   const handleTouchMove = (e) => {
     if (!isDragging || isSpinning) return;
+    console.log("fsdfdsfsddf")
     const touch = e.touches[0];
     const rect = wheelRef.current.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
@@ -127,9 +128,9 @@ function SpinTest({ segments = [] }) {
     const currentAngle = Math.atan2(dy, dx) * (180 / Math.PI);
     const deltaAngle = currentAngle - manualRotationRef.current;
 
-    setManualRotation((prev) => prev + deltaAngle);
+    setRotation((prev) => prev + deltaAngle);
     manualRotationRef.current = currentAngle;
-
+    console.log(manualRotation)
     // Расчёт скорости свайпа
     const now = Date.now();
     const dt = now - lastTime.current;
@@ -151,8 +152,10 @@ function SpinTest({ segments = [] }) {
 
     if (velocity > 0.5) {
       handleSpin();
+      setManualRotation(0)
+
     } else {
-      setManualRotation(0);
+      //setManualRotation(0);
     }
 
     velocityRef.current = 0;
@@ -201,11 +204,19 @@ function SpinTest({ segments = [] }) {
 
   // Анимация стрелки и звук при прохождении сегментов
   useEffect(() => {
-    if (!isSpinning && !isDragging) return;
+    if (!isSpinning) return;
     
     
     const interval = setInterval(() => {
-      setRotation(getTargetSegment() * 22.3 * 5)
+      //setRotation(getTargetSegment() * 22.3 * 5)
+      console.log(spinStore.currentGame.win)
+      if (spinStore.currentGame.win) {
+        setRotation(((360 * 5) + (22.3 * (getTargetSegment()) * -1)))
+      } else {
+        setRotation(((360 * 5) + (23 * (getTargetSegment()) * -1)))
+      }
+      console.log("Fsdfsdf222")
+      // setManualRotation(0)
       const currentAngle = rotationRef.current % 360;
       const currentSegment = Math.floor(currentAngle / segmentAngle);
       
@@ -334,7 +345,7 @@ function SpinTest({ segments = [] }) {
         component={motion.div}
         className="spinBackground"
         animate={{
-          rotate: isDragging ? manualRotation : rotation
+          rotate: isDragging ? rotation : rotation
         }}
         transition={{
           duration: isDragging ? 0 : 5,
@@ -346,7 +357,7 @@ function SpinTest({ segments = [] }) {
           position: "relative",
           width: `${wheelSize}px`,
           height: `${wheelSize}px`,
-          willChange: "transform",
+          willChange: "transform, opacity",
           transform: "translateZ(0) scale3d(1, 1, 1)",
           cursor: isSpinning ? "default" : "grab"
         }}
